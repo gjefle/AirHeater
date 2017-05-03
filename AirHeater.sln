@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirHeater.Common", "AirHeater.Common\AirHeater.Common.csproj", "{E935FD96-D330-4878-A476-CFB5C59AC893}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirHeater.AlarmMonitor", "AirHeater.AlarmMonitor\AirHeater.AlarmMonitor.csproj", "{A53F0677-FE24-4052-A92C-DEAFC53729FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirHeater.ControlSystem", "AirHeater.ControlSystem\AirHeater.ControlSystem.csproj", "{429E87B2-A948-4EFD-9152-082A4344C2ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirHeater.Datalogger", "AirHeater.Datalogger\AirHeater.Datalogger.csproj", "{284BF733-837C-4E38-B97B-96D6B95C5903}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E935FD96-D330-4878-A476-CFB5C59AC893}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E935FD96-D330-4878-A476-CFB5C59AC893}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E935FD96-D330-4878-A476-CFB5C59AC893}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E935FD96-D330-4878-A476-CFB5C59AC893}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A53F0677-FE24-4052-A92C-DEAFC53729FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A53F0677-FE24-4052-A92C-DEAFC53729FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A53F0677-FE24-4052-A92C-DEAFC53729FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A53F0677-FE24-4052-A92C-DEAFC53729FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{429E87B2-A948-4EFD-9152-082A4344C2ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{429E87B2-A948-4EFD-9152-082A4344C2ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{429E87B2-A948-4EFD-9152-082A4344C2ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{429E87B2-A948-4EFD-9152-082A4344C2ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{284BF733-837C-4E38-B97B-96D6B95C5903}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{284BF733-837C-4E38-B97B-96D6B95C5903}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{284BF733-837C-4E38-B97B-96D6B95C5903}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{284BF733-837C-4E38-B97B-96D6B95C5903}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
