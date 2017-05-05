@@ -9,6 +9,6 @@ namespace AirHeater.ControlSystem.PlantCom
     public interface IDataReader
     {
         double GetTemperature();
-        void SetTemperature(double temperature);
+        void SetGain(double gain);
     }
 }

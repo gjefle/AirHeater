@@ -24,7 +24,7 @@ namespace AirHeater.ControlSystem.PlantCom
             return PlantCalculations.CalcTemperature(reader.ReadSingleSample());
         }
 
-        public void SetTemperature(double temperature)
+        public void SetGain(double gain)
         {
             var niTask = new NationalInstruments.DAQmx.Task();
             var analogOutput= niTask.AOChannels.CreateVoltageChannel(
@@ -35,7 +35,6 @@ namespace AirHeater.ControlSystem.PlantCom
                 AOVoltageUnits.Volts
             );
             var writer = new AnalogSingleChannelWriter(niTask.Stream);
-            var gain = PlantCalculations.CalcGain(temperature);
             writer.WriteSingleSample(true, gain);
             
         }
