@@ -56,13 +56,17 @@ namespace AirHeater.ControlSystem.Simulation
         }
 
 
-        public double T_update(double u, double t)
+        public void T_update(double u, double t)
         {
             var tchange = (-Tout + (Kh * u_actual + Tenv)) / Tc;
-            Tout = tchange * 0.1 + Tout;
-            return tchange;
+            Tout = NoiseCreator(tchange * 0.1 + Tout);
         }
 
+        /// <summary>
+        /// Simulate a transport delay on gain
+        /// </summary>
+        /// <param name="u"></param>
+        /// <param name="t"></param>
         public void UpdateGain(double u, double t)
         {
             if (stepCount < steps)
@@ -94,6 +98,11 @@ namespace AirHeater.ControlSystem.Simulation
             });
         }
 
+        private double NoiseCreator(double val)
+        {
+            var rnd = new Random();
+            return val + rnd.Next(-3, 3) / 10.0;
+        }
         void StopAirHeater()
         {
             token.Cancel();

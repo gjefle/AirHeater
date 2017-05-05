@@ -20,6 +20,7 @@ using AirHeater.ControlSystem.PID;
 using AirHeater.ControlSystem.PlantCom;
 using AirHeater.ControlSystem.Simulation;
 using NationalInstruments;
+using NationalInstruments.Controls;
 using NationalInstruments.DAQmx;
 using Task = System.Threading.Tasks.Task;
 
@@ -35,11 +36,14 @@ namespace AirHeater.ControlSystem
         private PidController pidControl;
         private CancellationTokenSource token;
         private System.Threading.Tasks.Task pidTask;
+        private AnalogWaveform<double> analogWaveform;
 
         public MainWindow()
         {
             airHeater = new SimulatedHeaterReader(new AirHeaterSimulation(21.5, 0));
+            analogWaveform = new AnalogWaveform<double>(0);
             InitializeComponent();
+            TemperatureGraph.DataSource = analogWaveform;
             DataContext = this;
             RunViewUpdater();
             pidControl = new PidController(airHeater);
@@ -51,14 +55,26 @@ namespace AirHeater.ControlSystem
             {
                 while (!token.IsCancellationRequested)
                 {
-                    this.Temperature = airHeater?.GetTemperature()?? 0;
+                    this.Temperature = airHeater?.GetTemperature() ?? 0;
+                    UpdateTemperatureData();
                     await Task.Delay(200, token.Token);
                 }
             });
 
         }
+        public void UpdateTemperatureData()
+        {
+            //if (IsConnected)
+            //{
+            try
+            {
+                Temperature = airHeater?.GetTemperature() ?? 0;
+                analogWaveform.Append(AnalogWaveform<double>.FromArray1D(new double[] { Temperature }));
+            }
+            catch (Exception e) { throw e; }
+            //}
+        }
 
-       
         private double _temperature;
 
         public double Temperature
@@ -80,13 +96,13 @@ namespace AirHeater.ControlSystem
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            double val = 0;
+            double val;
             if (double.TryParse(gainbox.Text, out val))
             {
-                if(airHeater != null)
-                    airHeater.SetGain(val);;
+                if (pidControl != null)
+                    pidControl.SetPoint = val;
             }
-            
+
         }
     }
 }

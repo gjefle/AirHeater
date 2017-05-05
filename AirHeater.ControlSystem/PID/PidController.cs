@@ -10,32 +10,34 @@ namespace AirHeater.ControlSystem.PID
 {
     public class PidController
     {
-        public double r;
-        public double Kp;
-        public double Ti;
-        public double Ts;
-        public double z;
+        private double Tout;
+        private double Kp = 0.515; // T/K(Tc+Td);
+        private double Ti = 18.3; // min(T, c(Tc +Td)
+        private int Ts = 100;
+        private double z;
         private IDataReader _plantReader;
         private CancellationTokenSource pidToken;
         private System.Threading.Tasks.Task pidTask;
-        public double SetPoint { get; set; }
+        public double SetPoint { get; set; } = 25;
         public PidController(IDataReader plantReader)
         {
             _plantReader = plantReader;
             StartPid();
         }
 
-        public double PiController(double y)
+        public double PiController()
         {
-            var e = r - y;
+            var e = SetPoint - Tout;
             var u = Kp * e + (Kp / Ti) * z;
-            z = z + Ts * e;
+            z = z + Ts/1000.0 * e;
             return u;
         }
 
         private void UpdatePlant(double setPoint)
         {
-            
+            Tout = _plantReader.GetTemperature();
+            var u = PiController();
+            _plantReader.SetGain(u);
         }
 
         private void StartPid()
@@ -46,7 +48,7 @@ namespace AirHeater.ControlSystem.PID
             {
                 while (!pidToken.IsCancellationRequested)
                 {
-                    var delayTask = Task.Delay(100, pidToken.Token);
+                    var delayTask = Task.Delay(Ts, pidToken.Token);
                     UpdatePlant(SetPoint);
                     await delayTask;
                 }
