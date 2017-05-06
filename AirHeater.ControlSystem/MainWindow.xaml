@@ -6,27 +6,37 @@
         xmlns:local="clr-namespace:AirHeater.ControlSystem"
         xmlns:ni="http://schemas.ni.com/controls/2009/xaml/presentation" x:Class="AirHeater.ControlSystem.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="376.129" Width="559.341">
-    <Grid>
+        Title="Air Heater Control System" Height="624.725" Width="597.787">
+    <Grid Margin="0,0,11.4,5.6">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="10*"/>
-            <ColumnDefinition Width="249*"/>
+            <ColumnDefinition Width="11*"/>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition Width="279*"/>
         </Grid.ColumnDefinitions>
 
 
-        <ScrollBar Grid.Column="1" HorizontalAlignment="Left" Margin="58.4,269,0,0" VerticalAlignment="Top" Width="17" Height="32"/>
-        <TextBox x:Name="gainbox" Text="22" Grid.Column="1" HorizontalAlignment="Left" Height="32" Margin="10.4,268,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="43" TextChanged="TextBox_TextChanged" RenderTransformOrigin="-4.848,0.126"/>
+        <ScrollBar Name="SetPointScrollBar" Grid.Column="2" HorizontalAlignment="Left" Margin="69.4,198,0,0" VerticalAlignment="Top" Width="17" Height="32" ValueChanged="ScrollBar_ValueChanged"/>
+        <TextBox VerticalContentAlignment="Center" x:Name="Gainbox" Text="22" Grid.Column="1" HorizontalAlignment="Left" TextAlignment="Center"
+                 Height="32" Margin="26.4,198,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="43" 
+                 TextChanged="TextBox_TextChanged" RenderTransformOrigin="-4.848,0.126" Grid.ColumnSpan="2"/>
 
 
-        <ni:GaugeDouble Range="0,50" Value="{Binding Temperature, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Left" Height="112" Margin="10.4,32,0,0" VerticalAlignment="Top" Width="98"/>
-        <ni:Graph Name="TemperatureGraph" Grid.Column="1" HorizontalAlignment="Left" Height="237" Margin="146.4,32,0,0" VerticalAlignment="Top" Width="363">
+        <ni:GaugeDouble Range="0,50" Value="{Binding Temperature, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" HorizontalAlignment="Left" Height="112" Margin="0.4,32,0,0" VerticalAlignment="Top" Width="98"/>
+        <ni:Graph Name="TemperatureGraph" Grid.Column="2" HorizontalAlignment="Left" Height="251" Margin="144.4,32,0,0" VerticalAlignment="Top" Width="389">
             <ni:Graph.Axes>
-                <ni:AxisDouble Orientation="Vertical" Range="0, 50, System.Double" Adjuster="FitLoosely"></ni:AxisDouble>
-                <ni:AxisDouble Orientation="Horizontal" Range="0, 2000, System.Double" Adjuster="FitLoosely" />
+                <ni:AxisDouble Orientation="Vertical" Range="0, 50" Adjuster="FitLoosely"></ni:AxisDouble>
+                <ni:AxisDouble Orientation="Horizontal" Range="0, 2000" Adjuster="FitLoosely" />
             </ni:Graph.Axes>
         </ni:Graph>
-        <Label Content="Set point temperature&#xD;&#xA;" Grid.Column="1" HorizontalAlignment="Left" Margin="10.4,237,0,0" VerticalAlignment="Top" Height="27"/>
-        <Label Content="{Binding Temperature, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Left" Margin="37.4,144,0,0" VerticalAlignment="Top" Height="23" Width="38"/>
+        <Label Content="{Binding Temperature, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" HorizontalAlignment="Left" Margin="9.4,144,0,0" VerticalAlignment="Top" Height="23" Width="38"/>
+        <ni:Graph x:Name="TemperatureGraphUnfiltered" Grid.Column="2" HorizontalAlignment="Left" Height="251" Margin="144.4,329,0,0" VerticalAlignment="Top" Width="389">
+            <ni:Graph.Axes>
+                <ni:AxisDouble Orientation="Vertical" Range="0, 50" Adjuster="FitLoosely"/>
+                <ni:AxisDouble Orientation="Horizontal" Range="0, 2000" Adjuster="FitLoosely" />
+            </ni:Graph.Axes>
+        </ni:Graph>
+        <Label Content="Unfiltered" Grid.Column="2" HorizontalAlignment="Left" Margin="163.4,303,0,0" VerticalAlignment="Top"/>
+        <Label Content="Filtered" Grid.Column="2" HorizontalAlignment="Left" Margin="163.4,6,0,0" VerticalAlignment="Top"/>
 
 
     </Grid>

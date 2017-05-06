@@ -3,13 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AirHeater.ControlSystem.Filtering;
 using NationalInstruments.DAQmx;
 
 namespace AirHeater.ControlSystem.PlantCom
 {
-    public class DaqReader : IDataReader
+    public class DaqReader : IAirHeaterCom
     {
-        public double GetTemperature()
+        private IFilter _filter;
+
+        public DaqReader(IFilter filter)
+        {
+            _filter = filter;
+        }
+
+        public double GetFilteredTemperature()
+        {
+            var temperature = ReadTemperature();
+            return _filter.FilterNewValue(temperature);
+        }
+        public double ReadTemperature()
         {
             var niTask = new NationalInstruments.DAQmx.Task();
             AIChannel analogInput = niTask.AIChannels.CreateVoltageChannel(
@@ -23,7 +36,6 @@ namespace AirHeater.ControlSystem.PlantCom
             var reader = new AnalogSingleChannelReader(niTask.Stream);
             return PlantCalculations.CalcTemperature(reader.ReadSingleSample());
         }
-
         public void SetGain(double gain)
         {
             var niTask = new NationalInstruments.DAQmx.Task();

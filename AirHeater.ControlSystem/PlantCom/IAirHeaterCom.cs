@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace AirHeater.ControlSystem.PlantCom
 {
-    public interface IDataReader
+    public interface IAirHeaterCom
     {
-        double GetTemperature();
+        double GetFilteredTemperature();
+        double ReadTemperature();
         void SetGain(double gain);
     }
 }

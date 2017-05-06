@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using AirHeater.ControlSystem.Filtering;
 using AirHeater.ControlSystem.PID;
 using AirHeater.ControlSystem.PlantCom;
 using AirHeater.ControlSystem.Simulation;
@@ -37,13 +38,16 @@ namespace AirHeater.ControlSystem
         private CancellationTokenSource token;
         private System.Threading.Tasks.Task pidTask;
         private AnalogWaveform<double> analogWaveform;
+        private AnalogWaveform<double> unfilteredAnalogWaveform;
 
         public MainWindow()
         {
-            airHeater = new SimulatedHeaterReader(new AirHeaterSimulation(21.5, 0));
+            airHeater = new SimulatedHeaterReader(new LowPassFilter(21.5), new AirHeaterSimulation(21.5, 0));
             analogWaveform = new AnalogWaveform<double>(0);
+            unfilteredAnalogWaveform = new AnalogWaveform<double>(0);
             InitializeComponent();
             TemperatureGraph.DataSource = analogWaveform;
+            TemperatureGraphUnfiltered.DataSource = unfilteredAnalogWaveform;
             DataContext = this;
             RunViewUpdater();
             pidControl = new PidController(airHeater);
@@ -55,7 +59,6 @@ namespace AirHeater.ControlSystem
             {
                 while (!token.IsCancellationRequested)
                 {
-                    this.Temperature = airHeater?.GetTemperature() ?? 0;
                     UpdateTemperatureData();
                     await Task.Delay(200, token.Token);
                 }
@@ -68,8 +71,9 @@ namespace AirHeater.ControlSystem
             //{
             try
             {
-                Temperature = airHeater?.GetTemperature() ?? 0;
+                Temperature = airHeater?.GetFilteredTemperature() ?? 0;
                 analogWaveform.Append(AnalogWaveform<double>.FromArray1D(new double[] { Temperature }));
+                unfilteredAnalogWaveform.Append(AnalogWaveform<double>.FromArray1D(new double[] { airHeater?.ReadTemperature() ?? 0 }));
             }
             catch (Exception e) { throw e; }
             //}
@@ -97,12 +101,18 @@ namespace AirHeater.ControlSystem
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             double val;
-            if (double.TryParse(gainbox.Text, out val))
+            if (double.TryParse(Gainbox.Text, out val))
             {
                 if (pidControl != null)
                     pidControl.SetPoint = val;
             }
 
+        }
+
+        private void ScrollBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (pidControl != null)
+                pidControl.SetPoint = SetPointScrollBar.Value;
         }
     }
 }

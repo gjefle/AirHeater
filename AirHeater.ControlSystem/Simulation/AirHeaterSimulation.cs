@@ -59,7 +59,7 @@ namespace AirHeater.ControlSystem.Simulation
         public void T_update(double u, double t)
         {
             var tchange = (-Tout + (Kh * u_actual + Tenv)) / Tc;
-            Tout = NoiseCreator(tchange * 0.1 + Tout);
+            Tout = tchange * 0.1 + Tout;
         }
 
         /// <summary>
@@ -96,12 +96,6 @@ namespace AirHeater.ControlSystem.Simulation
                     await waitTask;
                 }
             });
-        }
-
-        private double NoiseCreator(double val)
-        {
-            var rnd = new Random();
-            return val + rnd.Next(-3, 3) / 10.0;
         }
         void StopAirHeater()
         {
