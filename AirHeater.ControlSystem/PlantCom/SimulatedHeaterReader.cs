@@ -29,7 +29,7 @@ namespace AirHeater.ControlSystem.PlantCom
             var temperature = NoiseCreator(_airHeater.Tout);
             return temperature;
         }
-        private double NoiseCreator(double val)
+        private static double NoiseCreator(double val)
         {
             var rnd = new Random();
             var randomNumber = rnd.Next(-3, 3) / 10.0;

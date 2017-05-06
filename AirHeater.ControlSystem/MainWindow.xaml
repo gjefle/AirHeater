@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:AirHeater.ControlSystem"
         xmlns:ni="http://schemas.ni.com/controls/2009/xaml/presentation" x:Class="AirHeater.ControlSystem.MainWindow"
         mc:Ignorable="d"
-        Title="Air Heater Control System" Height="624.725" Width="597.787">
+        Title="Air Heater Control System" Height="334.323" Width="597.787">
     <Grid Margin="0,0,11.4,5.6">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="11*"/>
@@ -15,12 +15,13 @@
         </Grid.ColumnDefinitions>
 
 
-        <ScrollBar Name="SetPointScrollBar" Grid.Column="2" HorizontalAlignment="Left" Margin="69.4,198,0,0" VerticalAlignment="Top" Width="17" Height="32" ValueChanged="ScrollBar_ValueChanged"/>
-        <TextBox VerticalContentAlignment="Center" x:Name="Gainbox" Text="22" Grid.Column="1" HorizontalAlignment="Left" TextAlignment="Center"
+        <!--<ScrollBar Value="{Binding SetPoint, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" HorizontalAlignment="Left" Margin="69.4,198,0,0" VerticalAlignment="Top" Width="17" Height="32"/>-->
+        <TextBox Text="{Binding SetPoint, UpdateSourceTrigger=PropertyChanged}"
+            VerticalContentAlignment="Center" x:Name="Gainbox" Grid.Column="1" HorizontalAlignment="Left" TextAlignment="Center"
                  Height="32" Margin="26.4,198,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="43" 
-                 TextChanged="TextBox_TextChanged" RenderTransformOrigin="-4.848,0.126" Grid.ColumnSpan="2"/>
-
-
+                 RenderTransformOrigin="-4.848,0.126" Grid.ColumnSpan="2"> 
+        </TextBox>
+        
         <ni:GaugeDouble Range="0,50" Value="{Binding Temperature, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" HorizontalAlignment="Left" Height="112" Margin="0.4,32,0,0" VerticalAlignment="Top" Width="98"/>
         <ni:Graph Name="TemperatureGraph" Grid.Column="2" HorizontalAlignment="Left" Height="251" Margin="144.4,32,0,0" VerticalAlignment="Top" Width="389">
             <ni:Graph.Axes>
@@ -29,14 +30,14 @@
             </ni:Graph.Axes>
         </ni:Graph>
         <Label Content="{Binding Temperature, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" HorizontalAlignment="Left" Margin="9.4,144,0,0" VerticalAlignment="Top" Height="23" Width="38"/>
-        <ni:Graph x:Name="TemperatureGraphUnfiltered" Grid.Column="2" HorizontalAlignment="Left" Height="251" Margin="144.4,329,0,0" VerticalAlignment="Top" Width="389">
+        <!--<ni:Graph x:Name="TemperatureGraphUnfiltered" Grid.Column="2" HorizontalAlignment="Left" Height="251" Margin="144.4,329,0,0" VerticalAlignment="Top" Width="389">
             <ni:Graph.Axes>
                 <ni:AxisDouble Orientation="Vertical" Range="0, 50" Adjuster="FitLoosely"/>
                 <ni:AxisDouble Orientation="Horizontal" Range="0, 2000" Adjuster="FitLoosely" />
             </ni:Graph.Axes>
         </ni:Graph>
         <Label Content="Unfiltered" Grid.Column="2" HorizontalAlignment="Left" Margin="163.4,303,0,0" VerticalAlignment="Top"/>
-        <Label Content="Filtered" Grid.Column="2" HorizontalAlignment="Left" Margin="163.4,6,0,0" VerticalAlignment="Top"/>
+        <Label Content="Filtered" Grid.Column="2" HorizontalAlignment="Left" Margin="163.4,6,0,0" VerticalAlignment="Top"/>-->
 
 
     </Grid>

@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using AirHeater.ControlSystem.Filtering;
+using AirHeater.ControlSystem.OpcCom;
 using AirHeater.ControlSystem.PID;
 using AirHeater.ControlSystem.PlantCom;
 using AirHeater.ControlSystem.Simulation;
@@ -33,24 +34,28 @@ namespace AirHeater.ControlSystem
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private CancellationTokenSource pidToken;
-        private SimulatedHeaterReader airHeater;
-        private PidController pidControl;
+        private IAirHeaterCom airHeaterCom;
+        private IPidController pidControl;
+        private OpcClient opcClient;
         private CancellationTokenSource token;
         private System.Threading.Tasks.Task pidTask;
         private AnalogWaveform<double> analogWaveform;
-        private AnalogWaveform<double> unfilteredAnalogWaveform;
+        //private AnalogWaveform<double> unfilteredAnalogWaveform;
 
         public MainWindow()
         {
-            airHeater = new SimulatedHeaterReader(new LowPassFilter(21.5), new AirHeaterSimulation(21.5, 0));
+            airHeaterCom = new SimulatedHeaterReader(new LowPassFilter(21.5), new AirHeaterSimulation(21.5, 0));
+            //airHeater = new DaqReader(new LowPassFilter(21.5));
             analogWaveform = new AnalogWaveform<double>(0);
-            unfilteredAnalogWaveform = new AnalogWaveform<double>(0);
+            //unfilteredAnalogWaveform = new AnalogWaveform<double>(0);
             InitializeComponent();
             TemperatureGraph.DataSource = analogWaveform;
-            TemperatureGraphUnfiltered.DataSource = unfilteredAnalogWaveform;
+            //TemperatureGraphUnfiltered.DataSource = unfilteredAnalogWaveform;
             DataContext = this;
             RunViewUpdater();
-            pidControl = new PidController(airHeater);
+            pidControl = new PidController(airHeaterCom);
+            opcClient = new OpcClient(airHeaterCom, pidControl);
+            SetPoint = 23;
         }
         private void RunViewUpdater()
         {
@@ -71,15 +76,16 @@ namespace AirHeater.ControlSystem
             //{
             try
             {
-                Temperature = airHeater?.GetFilteredTemperature() ?? 0;
+                Temperature = airHeaterCom?.GetFilteredTemperature() ?? 0;
                 analogWaveform.Append(AnalogWaveform<double>.FromArray1D(new double[] { Temperature }));
-                unfilteredAnalogWaveform.Append(AnalogWaveform<double>.FromArray1D(new double[] { airHeater?.ReadTemperature() ?? 0 }));
+                //unfilteredAnalogWaveform.Append(AnalogWaveform<double>.FromArray1D(new double[] { airHeater?.ReadTemperature() ?? 0 }));
             }
             catch (Exception e) { throw e; }
             //}
         }
 
         private double _temperature;
+        private double _setPoint;
 
         public double Temperature
         {
@@ -91,6 +97,19 @@ namespace AirHeater.ControlSystem
             }
         }
 
+        public double SetPoint
+        {
+            get => _setPoint;
+            set
+            {
+                _setPoint = value;
+                if (pidControl != null)
+                    pidControl.SetPoint = value;
+                OnPropertyChanged("Temperature");
+            }
+        }
+
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged(string propertyName)
@@ -98,21 +117,20 @@ namespace AirHeater.ControlSystem
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            double val;
-            if (double.TryParse(Gainbox.Text, out val))
-            {
-                if (pidControl != null)
-                    pidControl.SetPoint = val;
-            }
+        //private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        //{
+        //    double val;
+        //    if (double.TryParse(Gainbox.Text, out val))
+        //    {
+        //        if (pidControl != null)
+        //            pidControl.SetPoint = val;
+        //    }
 
-        }
+        //}
 
-        private void ScrollBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (pidControl != null)
-                pidControl.SetPoint = SetPointScrollBar.Value;
-        }
+        //private void ScrollBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        //{
+        //    SetPoint = SetPointScrollBar.Value;
+        //}
     }
 }

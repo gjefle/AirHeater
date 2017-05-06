@@ -8,8 +8,16 @@ using AirHeater.ControlSystem.PlantCom;
 
 namespace AirHeater.ControlSystem.PID
 {
-    public class PidController : IDisposable
+    public interface IPidController
     {
+        double CurrentGain { get; set; }
+        double SetPoint { get; set; }
+    }
+    public class PidController : IDisposable, IPidController
+    {
+        public double SetPoint { get; set; } = 25;
+        public double CurrentGain { get; set; }
+
         private const double MinGain = 0;
         private const double MaxGain = 5;
         private double Tout;
@@ -20,14 +28,14 @@ namespace AirHeater.ControlSystem.PID
         private IAirHeaterCom _plantReader;
         private CancellationTokenSource pidToken;
         private System.Threading.Tasks.Task pidTask;
-        public double SetPoint { get; set; } = 25;
+
         public PidController(IAirHeaterCom plantReader)
         {
             _plantReader = plantReader;
             StartPid();
         }
 
-        public double PiController()
+        private double CalculateGain()
         {
             var e = SetPoint - Tout;
             var u = Kp * e + (Kp / Ti) * z;
@@ -38,8 +46,8 @@ namespace AirHeater.ControlSystem.PID
         private void UpdatePlant(double setPoint)
         {
             Tout = _plantReader.GetFilteredTemperature();
-            var u = PiController();
-            _plantReader.SetGain(u);
+            CurrentGain = CalculateGain();
+            _plantReader.SetGain(CurrentGain);
         }
 
         private void StartPid()
@@ -56,7 +64,7 @@ namespace AirHeater.ControlSystem.PID
                 }
             });
         }
-        void StopPid()
+        private void StopPid()
         {
             pidToken.Cancel();
             try

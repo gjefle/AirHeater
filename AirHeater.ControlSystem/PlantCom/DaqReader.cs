@@ -26,7 +26,7 @@ namespace AirHeater.ControlSystem.PlantCom
         {
             var niTask = new NationalInstruments.DAQmx.Task();
             AIChannel analogInput = niTask.AIChannels.CreateVoltageChannel(
-                "dev1/ai0",
+                "Dev1/ai0",
                 "myAIChannel",
                 AITerminalConfiguration.Differential,
                 0,
@@ -40,7 +40,7 @@ namespace AirHeater.ControlSystem.PlantCom
         {
             var niTask = new NationalInstruments.DAQmx.Task();
             var analogOutput= niTask.AOChannels.CreateVoltageChannel(
-                "dev1/ao0",
+                "Dev1/ao0",
                 "myAIChannel",
                 0,
                 5,
