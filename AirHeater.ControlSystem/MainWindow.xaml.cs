@@ -35,7 +35,7 @@ namespace AirHeater.ControlSystem
     {
         private CancellationTokenSource pidToken;
         private IAirHeaterCom airHeaterCom;
-        private IPidController pidControl;
+        private PidController pidControl;
         private OpcClient opcClient;
         private CancellationTokenSource token;
         private System.Threading.Tasks.Task pidTask;

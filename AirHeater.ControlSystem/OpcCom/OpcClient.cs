@@ -18,9 +18,9 @@ namespace AirHeater.ControlSystem.OpcCom
         private CancellationTokenSource token;
         private System.Threading.Tasks.Task task;
         private IAirHeaterCom _heaterCom;
-        private IPidController _pidController;
+        private IPidCom _pidController;
 
-        public OpcClient(IAirHeaterCom heaterCom, IPidController pidController)
+        public OpcClient(IAirHeaterCom heaterCom, IPidCom pidController)
         {
             _heaterCom = heaterCom;
             _pidController = pidController;
@@ -59,7 +59,7 @@ namespace AirHeater.ControlSystem.OpcCom
                 {
                     var waitTask = Task.Delay(1000, token.Token);
                     var temperature = Math.Round(_heaterCom.GetFilteredTemperature(), 2);
-                    var gain = Math.Round(_pidController.CurrentGain, 2);
+                    var gain = Math.Round(_pidController.GetCurrentGain(), 2);
                     WriteToServer("Temperature", temperature);
                     WriteToServer("Gain", gain);
                     await waitTask;

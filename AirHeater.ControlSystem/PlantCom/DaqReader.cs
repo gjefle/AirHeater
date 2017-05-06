@@ -8,11 +8,11 @@ using NationalInstruments.DAQmx;
 
 namespace AirHeater.ControlSystem.PlantCom
 {
-    public class DaqReader : IAirHeaterCom
+    public class AirHeaterReader : IAirHeaterCom
     {
         private IFilter _filter;
 
-        public DaqReader(IFilter filter)
+        public AirHeaterReader(IFilter filter)
         {
             _filter = filter;
         }

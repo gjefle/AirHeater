@@ -88,6 +88,7 @@
     <Compile Include="Filter\LowPassFilter.cs" />
     <Compile Include="OpcCom\OpcClient.cs" />
     <Compile Include="PID\PidController.cs" />
+    <Compile Include="PID\PidReader.cs" />
     <Compile Include="PlantCom\DaqReader.cs" />
     <Compile Include="PlantCom\IAirHeaterCom.cs" />
     <Compile Include="PlantCom\SimulatedHeaterReader.cs" />

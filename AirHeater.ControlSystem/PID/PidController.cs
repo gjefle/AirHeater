@@ -8,15 +8,15 @@ using AirHeater.ControlSystem.PlantCom;
 
 namespace AirHeater.ControlSystem.PID
 {
-    public interface IPidController
+    public interface IPidCom
     {
-        double CurrentGain { get; set; }
-        double SetPoint { get; set; }
+        double GetCurrentGain();
+
     }
-    public class PidController : IDisposable, IPidController
+    public class PidController : IDisposable, IPidCom
     {
         public double SetPoint { get; set; } = 25;
-        public double CurrentGain { get; set; }
+        private double _u;
 
         private const double MinGain = 0;
         private const double MaxGain = 5;
@@ -35,6 +35,10 @@ namespace AirHeater.ControlSystem.PID
             StartPid();
         }
 
+        public double GetCurrentGain()
+        {
+            return _u;
+        }
         private double CalculateGain()
         {
             var e = SetPoint - Tout;
@@ -46,8 +50,8 @@ namespace AirHeater.ControlSystem.PID
         private void UpdatePlant(double setPoint)
         {
             Tout = _plantReader.GetFilteredTemperature();
-            CurrentGain = CalculateGain();
-            _plantReader.SetGain(CurrentGain);
+            _u = CalculateGain();
+            _plantReader.SetGain(_u);
         }
 
         private void StartPid()
