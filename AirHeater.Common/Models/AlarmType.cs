@@ -9,7 +9,7 @@ namespace AirHeater.Common.Models
     public class AlarmType
     {
         public int AlarmTypeId { get; set; }
-        public string Name { get; set; }
-        public string Limit { get; set; }
+        public string TypeEnum { get; set; }
+        public string TypeName { get; set; }
     }
 }

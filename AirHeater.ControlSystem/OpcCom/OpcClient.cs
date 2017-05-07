@@ -25,7 +25,7 @@ namespace AirHeater.ControlSystem.OpcCom
             _heaterCom = heaterCom;
             _pidController = pidController;
             _socket = new DataSocket();
-            StartAirHeater();
+            StartOpcWriter();
         }
 
         public void WriteToServer(string tag, double value)
@@ -47,9 +47,7 @@ namespace AirHeater.ControlSystem.OpcCom
             }
            
         }
-
-
-        private void StartAirHeater()
+        private void StartOpcWriter()
         {
             token = new CancellationTokenSource();
 
@@ -57,7 +55,7 @@ namespace AirHeater.ControlSystem.OpcCom
             {
                 while (!token.IsCancellationRequested)
                 {
-                    var waitTask = Task.Delay(1000, token.Token);
+                    var waitTask = Task.Delay(200, token.Token);
                     var temperature = Math.Round(_heaterCom.GetFilteredTemperature(), 2);
                     var gain = Math.Round(_pidController.GetCurrentGain(), 2);
                     WriteToServer("Temperature", temperature);
