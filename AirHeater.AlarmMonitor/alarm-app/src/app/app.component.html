@@ -1,3 +1,44 @@
-<h1>
-  {{title}}
-</h1>
+﻿<div *ngIf="enabledTemperatureAlarms.length > 0" class="layout-center alarm-banner">
+  <div style="padding: 2px 5px 2px 5px">{{enabledTemperatureAlarms[0].typeName}} - {{enabledTemperatureAlarms[0].description}}</div>
+  <div class="alarm-circle" *ngIf="enabledTemperatureAlarms.length > 1">{{enabledTemperatureAlarms.length}}</div>
+</div>
+<div class="container">
+  <h1>
+    {{title}}
+  </h1>
+  <hr />
+  <app-temperature></app-temperature>
+  <hr />
+  <div class="layout table-container">
+    <table class="font-medium">
+      <tr>
+        <th style="max-width:25px">Active</th>
+        <th>Date Activated</th>
+        <th>Type</th>       
+        <th>Description</th>
+        <th>Acknowledge</th>
+      </tr>
+      <tr *ngFor="let alarm of sortedTemperatureAlarms" [ngStyle]="alarmStyle(alarm)">
+        <td style="max-width: 25px">
+          <i class="font-large fa fa-warning alarm-icon" *ngIf="alarm.active"></i>
+        </td>
+        <td>{{alarm.activationDate | date: 'dd/mm/yy h:m:s'}}</td>
+        <!--<td>{{alarm.activationDate | date: 'short'}}</td>-->
+        <td>{{alarm.typeName}}</td>
+        <td>{{alarm.description}}</td>
+        <td>
+          <div style="float: right">
+            <div *ngIf="alarm.acknowledged">
+              Acknowledged {{alarm.acknowledgeDate | date: 'dd/mm/yy h:m:s'}}
+            </div>
+            <button (click)="acknowledgeAlarm(alarm)" *ngIf="!alarm.acknowledged">
+              <i class="fa fa-pencil-square-o"></i>
+              Acknowledge
+            </button>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+  
+</div>

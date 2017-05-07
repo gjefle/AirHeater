@@ -22,18 +22,33 @@ namespace AirHeater.AlarmMonitor.Controllers
         }
 
         // GET api/values
-        [HttpGet, Route("{TemperatureAlarms}")]
+        [HttpGet, Route("TemperatureAlarms")]
         public IEnumerable<TemperatureAlarmView> TemperatureAlarms()
         {
             return  _ctx.TemperatureAlarmView.FromSql("select * from dbo.TemperatureAlarmView").ToList();
         }
 
-        [HttpGet, Route("{EnabledTemperatureAlarms}")]
+        [HttpGet, Route("EnabledTemperatureAlarms")]
         public IEnumerable<TemperatureAlarmView> EnabledTemperatureAlarms()
         {
             return _ctx.TemperatureAlarmView.FromSql("select * from dbo.TemperatureAlarmView")
                 .Where(taw => taw.Active || !taw.Acknowledged)
                 .ToList();
+        }
+
+        [HttpGet, Route("{AcknowledgeAlarm}/{id}")]
+        public IEnumerable<TemperatureAlarmView> AcknowledgeAlarm([FromRoute]int id)
+        {
+            var alarm = _ctx.TemperatureAlarm
+                .FirstOrDefault(ta => ta.TemperatureAlarmId == id);
+            if (alarm != null)
+            {
+                alarm.Acknowledged = true;
+                alarm.AcknowledgeDate = DateTimeOffset.Now;
+                _ctx.SaveChanges();
+                return _ctx.TemperatureAlarmView.FromSql("select * from dbo.TemperatureAlarmView").ToList();
+            }
+            return null;
         }
     }
 }

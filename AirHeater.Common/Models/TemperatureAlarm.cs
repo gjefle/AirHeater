@@ -13,7 +13,7 @@ namespace AirHeater.Common.Models
         public AlarmType AlarmType { get; set; }
         public DateTimeOffset ActivationDate { get; set; }
         public bool Acknowledged { get; set; }
-        public DateTimeOffset AcknowledgeDate { get; set; }
+        public DateTimeOffset? AcknowledgeDate { get; set; }
         public bool Active { get; set; }
         public string Description { get; set; }
     }

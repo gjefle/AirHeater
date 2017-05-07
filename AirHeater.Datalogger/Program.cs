@@ -51,7 +51,7 @@ namespace AirHeater.Datalogger
                 {
                     SqlCommand cmd = new SqlCommand("AddTemperature", dbCon);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new SqlParameter("@Value", temperature));
+                    cmd.Parameters.Add(new SqlParameter("@Value", Math.Round((double)temperature, 2)));
                     cmd.Parameters.Add(new SqlParameter("@TagName", "Temperature"));
                     dbCon.Open();
                     cmd.ExecuteNonQuery();

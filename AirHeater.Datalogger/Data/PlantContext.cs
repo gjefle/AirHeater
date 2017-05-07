@@ -8,13 +8,13 @@ using AirHeater.Common.Models;
 
 namespace AirHeater.Datalogger.Data
 {
-    public class PlantContext : DbContext
-    {
-        public PlantContext() : base("PlantContext") { }
-        public DbSet<Temperature> Temperature { get; set; }
-        public DbSet<Tag> Logger { get; set; }
-        public DbSet<AlarmType> AlarmType { get; set; }
-        public DbSet<TemperatureAlarm> Alarm { get; set; }
+    //public class PlantContext : DbContext
+    //{
+    //    public PlantContext() : base("PlantContext") { }
+    //    public DbSet<Temperature> Temperature { get; set; }
+    //    public DbSet<Tag> Logger { get; set; }
+    //    public DbSet<AlarmType> AlarmType { get; set; }
+    //    public DbSet<TemperatureAlarm> Alarm { get; set; }
 
-    }
+    //}
 }
