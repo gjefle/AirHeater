@@ -3,6 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="alarm-app\node_modules\**" />
+    <Content Remove="alarm-app\node_modules\**" />
+    <EmbeddedResource Remove="alarm-app\node_modules\**" />
+    <None Remove="alarm-app\node_modules\**" />
+  </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="1.0.0" />
   </ItemGroup>
