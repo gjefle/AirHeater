@@ -1,6 +1,6 @@
 ﻿<div *ngIf="enabledTemperatureAlarms.length > 0" class="layout-center alarm-banner">
   <div style="padding: 2px 5px 2px 5px">{{enabledTemperatureAlarms[0].typeName}} - {{enabledTemperatureAlarms[0].description}}</div>
-  <div class="alarm-circle" *ngIf="enabledTemperatureAlarms.length > 1">{{enabledTemperatureAlarms.length}}</div>
+  <div class="alarm-circle" *ngIf="enabledTemperatureAlarms.length > 1">+{{enabledTemperatureAlarms.length -1}}</div>
 </div>
 <div class="container">
   <h1>

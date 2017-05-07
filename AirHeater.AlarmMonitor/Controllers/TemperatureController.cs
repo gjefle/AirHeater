@@ -23,7 +23,10 @@ namespace AirHeater.AlarmMonitor.Controllers
         [HttpGet]
         public IEnumerable<Temperature> Get()
         {
-            return _ctx.Temperature.AsNoTracking().ToList();
+            var today = DateTime.Today;
+            return _ctx.Temperature.AsNoTracking()
+                .Where(t => t.LogDate.DateTime >= today)
+                .ToList();
         }
         [HttpGet]
         [Route("{UpdateTemperature}/{date}")]
