@@ -17,8 +17,10 @@ namespace AirHeater.Datalogger
         private static OpcReader opcReader;
         private static CancellationTokenSource token;
         private static System.Threading.Tasks.Task task;
+        private static string connectionString;
         static void Main(string[] args)
         {
+            connectionString = ConfigurationManager.ConnectionStrings["PlantContext"].ConnectionString;
             opcReader = new OpcReader(new DataSocket());
             //var temperature = GetTemperature();
             //Console.WriteLine(temperature);
@@ -46,7 +48,7 @@ namespace AirHeater.Datalogger
             if(temperature == null) return;
             try
             {
-                var connectionString = ConfigurationManager.ConnectionStrings["PlantContext"].ConnectionString;
+                //var connectionString = ConfigurationManager.ConnectionStrings["PlantContext"].ConnectionString;
                 using (SqlConnection dbCon= new SqlConnection(connectionString))
                 {
                     SqlCommand cmd = new SqlCommand("AddTemperature", dbCon);

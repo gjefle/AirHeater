@@ -14,7 +14,7 @@ namespace AirHeater.Datalogger.Data
     //    public DbSet<Temperature> Temperature { get; set; }
     //    public DbSet<Tag> Logger { get; set; }
     //    public DbSet<AlarmType> AlarmType { get; set; }
-    //    public DbSet<TemperatureAlarm> Alarm { get; set; }
+    //    public DbSet<Alarm> Alarm { get; set; }
 
     //}
 }

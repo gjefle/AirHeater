@@ -16,14 +16,14 @@ namespace AirHeater.AlarmMonitor.Data
         public DbSet<Temperature> Temperature { get; set; }
         public DbSet<Tag> Tag { get; set; }
         public DbSet<AlarmType> AlarmType { get; set; }
-        public DbSet<TemperatureAlarm> TemperatureAlarm { get; set; }
+        public DbSet<Alarm> Alarm { get; set; }
 
-        public DbSet<TemperatureAlarmView> TemperatureAlarmView { get; set; }
+        public DbSet<AlarmView> AlarmView { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<TemperatureAlarmView>()
-                .ToTable("TemperatureAlarmView").HasKey(ta => ta.TemperatureAlarmId);
+            modelBuilder.Entity<AlarmView>()
+                .ToTable("AlarmView").HasKey(ta => ta.AlarmId);
         }
     }
 }

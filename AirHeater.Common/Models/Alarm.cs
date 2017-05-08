@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace AirHeater.Common.Models
 {
-    public class TemperatureAlarm
+    public class Alarm
     {
-        public int TemperatureAlarmId { get; set; }
+        public int AlarmId { get; set; }
         public int AlarmTypeId { get; set; }
+        public int TagId { get; set; }
         public AlarmType AlarmType { get; set; }
         public DateTimeOffset ActivationDate { get; set; }
         public bool Acknowledged { get; set; }

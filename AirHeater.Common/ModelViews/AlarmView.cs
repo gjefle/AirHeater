@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace AirHeater.Common.ModelViews
 {
-    public class TemperatureAlarmView
+    public class AlarmView
     {
-        public int TemperatureAlarmId { get; set; }
+        public int AlarmId { get; set; }
         public DateTimeOffset ActivationDate { get; set; }
         public bool Acknowledged { get; set; }
         public DateTimeOffset? AcknowledgeDate { get; set; }

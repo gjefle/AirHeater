@@ -22,31 +22,37 @@ namespace AirHeater.AlarmMonitor.Controllers
         }
 
         // GET api/values
-        [HttpGet, Route("TemperatureAlarms")]
-        public IEnumerable<TemperatureAlarmView> TemperatureAlarms()
+        [HttpGet, Route("All")]
+        public IEnumerable<AlarmView> All()
         {
-            return  _ctx.TemperatureAlarmView.FromSql("select * from dbo.TemperatureAlarmView").ToList();
-        }
-
-        [HttpGet, Route("EnabledTemperatureAlarms")]
-        public IEnumerable<TemperatureAlarmView> EnabledTemperatureAlarms()
-        {
-            return _ctx.TemperatureAlarmView.FromSql("select * from dbo.TemperatureAlarmView")
-                .Where(taw => taw.Active || !taw.Acknowledged)
+            return  _ctx.AlarmView.FromSql("select * from dbo.AlarmView")
+                .OrderBy(av => !av.Active)
+                .ThenBy(av => av.Acknowledged)
                 .ToList();
         }
 
-        [HttpGet, Route("{AcknowledgeAlarm}/{id}")]
-        public IEnumerable<TemperatureAlarmView> AcknowledgeAlarm([FromRoute]int id)
+        [HttpGet, Route("TodaysAlarms")]
+        public IEnumerable<AlarmView> TodaysAlarms()
         {
-            var alarm = _ctx.TemperatureAlarm
-                .FirstOrDefault(ta => ta.TemperatureAlarmId == id);
+            var today = DateTime.Today;
+            return _ctx.AlarmView.FromSql("select * from dbo.AlarmView")
+                .Where(taw => taw.ActivationDate.DateTime > today)
+                .OrderBy(av => !av.Active)
+                .ThenBy(av => av.Acknowledged)
+                .ToList();
+        }
+
+        [HttpGet, Route("AcknowledgeAlarm/{id}")]
+        public Alarm AcknowledgeAlarm([FromRoute]int id)
+        {
+            var alarm = _ctx.Alarm
+                .FirstOrDefault(ta => ta.AlarmId == id);
             if (alarm != null)
             {
                 alarm.Acknowledged = true;
                 alarm.AcknowledgeDate = DateTimeOffset.Now;
                 _ctx.SaveChanges();
-                return _ctx.TemperatureAlarmView.FromSql("select * from dbo.TemperatureAlarmView").ToList();
+                return alarm;
             }
             return null;
         }
