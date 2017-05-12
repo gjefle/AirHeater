@@ -18,18 +18,31 @@
         <!--<ScrollBar Value="{Binding SetPoint, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" HorizontalAlignment="Left" Margin="69.4,198,0,0" VerticalAlignment="Top" Width="17" Height="32"/>-->
         <TextBox Text="{Binding SetPoint, UpdateSourceTrigger=PropertyChanged}"
             VerticalContentAlignment="Center" x:Name="Gainbox" Grid.Column="1" HorizontalAlignment="Left" TextAlignment="Center"
-                 Height="32" Margin="26.4,198,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="43" 
+                 Height="26" Margin="10.4,198,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="117" 
                  RenderTransformOrigin="-4.848,0.126" Grid.ColumnSpan="2"> 
         </TextBox>
         
-        <ni:GaugeDouble Range="0,50" Value="{Binding Temperature, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" HorizontalAlignment="Left" Height="112" Margin="0.4,32,0,0" VerticalAlignment="Top" Width="98"/>
+        <ni:GaugeDouble Range="0,50" Value="{Binding Temperature, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" HorizontalAlignment="Left" Height="112" Margin="10.4,32,0,0" VerticalAlignment="Top" Width="98"/>
         <ni:Graph Name="TemperatureGraph" Grid.Column="2" HorizontalAlignment="Left" Height="251" Margin="144.4,32,0,0" VerticalAlignment="Top" Width="389">
             <ni:Graph.Axes>
                 <ni:AxisDouble Orientation="Vertical" Range="0, 50" Adjuster="FitLoosely"></ni:AxisDouble>
                 <ni:AxisDouble Orientation="Horizontal" Range="0, 2000" Adjuster="FitLoosely" />
             </ni:Graph.Axes>
         </ni:Graph>
-        <Label Content="{Binding Temperature, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" HorizontalAlignment="Left" Margin="9.4,144,0,0" VerticalAlignment="Top" Height="23" Width="38"/>
+        <Label Content="{Binding Temperature, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" HorizontalAlignment="Left" Margin="31.4,144,0,0" VerticalAlignment="Top" Height="23" Width="38" RenderTransformOrigin="0.5,0.5">
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="0.345"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
+        <Label Content="Set temperature [20-50] C" Grid.Column="2" HorizontalAlignment="Left" Margin="0.4,172,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.513,-0.279" Width="149"/>
+        <Label Content="C" Grid.Column="2" HorizontalAlignment="Left" Margin="74.4,141,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.1,0.612"/>
+        <Label Content="{Binding Gain, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" HorizontalAlignment="Left" Margin="36.4,257,0,0" VerticalAlignment="Top"/>
+
         <!--<ni:Graph x:Name="TemperatureGraphUnfiltered" Grid.Column="2" HorizontalAlignment="Left" Height="251" Margin="144.4,329,0,0" VerticalAlignment="Top" Width="389">
             <ni:Graph.Axes>
                 <ni:AxisDouble Orientation="Vertical" Range="0, 50" Adjuster="FitLoosely"/>

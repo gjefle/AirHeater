@@ -19,6 +19,8 @@ export class TemperatureComponent implements OnInit {
   constructor(private ctx: DataContextService) { }
 
   ngOnInit() {
+    this.lastUpdate = new Date();
+    this.lastUpdate.setFullYear(1970);
     this.setOptions();
     this.interval = IntervalObservable.create(2000).subscribe(this.updateTemperatures);
     this.getAllTemperatures();
@@ -62,13 +64,17 @@ export class TemperatureComponent implements OnInit {
     });
     var data = [];
     temperatures.forEach(t => {
-      var m = moment(t.logDate).utc(true).valueOf();
+      var m = moment(t.logDate).milliseconds(0).utc(true).valueOf();
+      
       data.push([m, t.value]);
     });
     this.chart.series[0].setData(data, true);
   }
   private setOptions() {
     this.options = {
+      tooltip: {
+        valueSuffix: " \u00B0C"
+      },
       xAxis: {
         type: 'datetime',
         title: {

@@ -26,6 +26,7 @@ namespace AirHeater.AlarmMonitor.Controllers
             var today = DateTime.Today;
             return _ctx.Temperature.AsNoTracking()
                 .Where(t => t.LogDate.DateTime >= today)
+                .Take(200)
                 .ToList();
         }
         [HttpGet]

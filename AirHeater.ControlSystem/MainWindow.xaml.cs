@@ -5,17 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Timers;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using AirHeater.ControlSystem.Filtering;
 using AirHeater.ControlSystem.OpcCom;
 using AirHeater.ControlSystem.PID;
@@ -31,11 +21,12 @@ namespace AirHeater.ControlSystem
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, INotifyPropertyChanged
+    public partial class MainWindow : Window, IDisposable, INotifyPropertyChanged
     {
         private CancellationTokenSource pidToken;
         private IAirHeaterCom airHeaterCom;
         private PidController pidControl;
+        private PidReader realPid;
         private OpcClient opcClient;
         private CancellationTokenSource token;
         private System.Threading.Tasks.Task pidTask;
@@ -44,7 +35,8 @@ namespace AirHeater.ControlSystem
 
         public MainWindow()
         {
-            airHeaterCom = new SimulatedHeaterReader(new LowPassFilter(21.5), new AirHeaterSimulation(21.5, 0));
+            //airHeaterCom = new SimulatedHeaterReader(new LowPassFilter(21.5), new AirHeaterSimulation(21.5, 0));
+           airHeaterCom = new AirHeaterReader(new LowPassFilter(21.5));
             //airHeater = new DaqReader(new LowPassFilter(21.5));
             analogWaveform = new AnalogWaveform<double>(0);
             //unfilteredAnalogWaveform = new AnalogWaveform<double>(0);
@@ -53,7 +45,8 @@ namespace AirHeater.ControlSystem
             //TemperatureGraphUnfiltered.DataSource = unfilteredAnalogWaveform;
             DataContext = this;
             RunViewUpdater();
-            pidControl = new PidController(airHeaterCom);
+            //pidControl = new PidController(airHeaterCom);
+            realPid = new PidReader();
             opcClient = new OpcClient(airHeaterCom, pidControl);
             SetPoint = 23;
         }
@@ -65,11 +58,33 @@ namespace AirHeater.ControlSystem
                 while (!token.IsCancellationRequested)
                 {
                     UpdateTemperatureData();
-                    await Task.Delay(200, token.Token);
+                    UpdatePid();
+                    //UpdateSimulator();
+                    await Task.Delay(500, token.Token);
                 }
             });
-
         }
+
+        public void UpdatePid()
+        {
+            //var gain = realPid.GetCurrentGain();
+            //airHeaterCom.SetGain(gain);
+            //var t = airHeaterCom.GetFilteredTemperature();
+            //realPid.SetProcessValue(t);
+        }
+
+        private double _gain;
+
+        public double Gain
+        {
+            get => _gain;
+            set
+            {
+                _gain = value;
+                OnPropertyChanged("Gain");
+            }
+        }
+
         public void UpdateTemperatureData()
         {
             //if (IsConnected)
@@ -117,20 +132,10 @@ namespace AirHeater.ControlSystem
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        //private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        //{
-        //    double val;
-        //    if (double.TryParse(Gainbox.Text, out val))
-        //    {
-        //        if (pidControl != null)
-        //            pidControl.SetPoint = val;
-        //    }
-
-        //}
-
-        //private void ScrollBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        //{
-        //    SetPoint = SetPointScrollBar.Value;
-        //}
+        public void Dispose()
+        {
+            token.Cancel();
+            pidToken.Cancel();
+        }
     }
 }

@@ -18,7 +18,12 @@ namespace AirHeater.ControlSystem
             var temperature = t0 + (v - v0) * (t1 - t0) / (v1 - v0);
             return temperature;
         }
-       
+
+        public static double CalcTemperatureToVolt(double t)
+        {
+            var volt = v0 + (t - t0) * (v1 - v0) / (t1 - t0);
+            return Math.Min(Math.Max(volt, 1), 5);
+        }
         //public static double CalcGain(double temperature)
         //{
         //    throw new NotImplementedException();
