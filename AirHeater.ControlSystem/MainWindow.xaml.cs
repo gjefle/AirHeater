@@ -90,7 +90,10 @@ namespace AirHeater.ControlSystem
             }
         }
 
-        public string GainLabel => Math.Round(_gain, 1) + " V";
+        public string GainLabel => "Gain " + Math.Round(_gain, 1) + " V";
+
+        public string TemperatureLabel => "Temperature " + Math.Round(_temperature, 1) + " C";
+
         public void UpdateTemperatureData()
         {
             //if (IsConnected)
@@ -155,10 +158,7 @@ namespace AirHeater.ControlSystem
             this.SetPoint += 1;
             OnPropertyChanged("SetPoint");
         }
-
         
-        public string TemperatureLabel => Math.Round(_temperature, 1) + " C";
-
         private void ArrowButton_Click_1(object sender, RoutedEventArgs e)
         {
             this.SetPoint -= 1;

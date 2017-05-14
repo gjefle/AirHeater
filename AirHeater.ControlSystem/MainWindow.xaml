@@ -9,33 +9,38 @@
         Title="Air Heater Control System" Height="424.323" Width="822.487">
     <Grid Margin="0,0,11.4,5.6">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="11*"/>
-            <ColumnDefinition Width="0*"/>
-            <ColumnDefinition Width="279*"/>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="75*"/>
+            <ColumnDefinition Width="317*"/>
         </Grid.ColumnDefinitions>
 
 
         <!--<ScrollBar Value="{Binding SetPoint, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" HorizontalAlignment="Left" Margin="69.4,198,0,0" VerticalAlignment="Top" Width="17" Height="32"/>-->
-       
-        <ni:Graph Name="TemperatureGraph" Grid.Column="2" HorizontalAlignment="Left" Height="334" Margin="162.6,32,0,0" VerticalAlignment="Top" Width="584">
+
+        <ni:Graph Name="TemperatureGraph" Grid.Column="2" HorizontalAlignment="Left" Height="334" Margin="40.6,43,0,0" VerticalAlignment="Top" Width="584">
             <ni:Graph.Axes>
                 <ni:AxisDouble Orientation="Vertical" Range="0, 50" Adjuster="FitLoosely"></ni:AxisDouble>
                 <ni:AxisDouble Orientation="Horizontal" Range="0, 2000" Adjuster="FitLoosely" />
             </ni:Graph.Axes>
         </ni:Graph>
-        <Label Content="{Binding TemperatureLabel, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Margin="38,125,666.8,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Height="27" RenderTransformOrigin="0.761,0.492"></Label>
-        <Label Content="{Binding GainLabel, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Margin="38,245,666.8,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Height="27" RenderTransformOrigin="0.761,0.492"></Label>
-        <Label Content="Set temperature [20-50] C" HorizontalAlignment="Left" Margin="5.6,278,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.513,-0.279" Width="149" Grid.Column="2"/>
+        <Label Content="{Binding TemperatureLabel, UpdateSourceTrigger=PropertyChanged}" 
+               Grid.Column="1" Margin="10,127,10.4,0"
+               VerticalAlignment="Top" HorizontalContentAlignment="Center" Height="27" 
+               />
+        <Label Content="{Binding GainLabel, UpdateSourceTrigger=PropertyChanged}" 
+               Grid.Column="1" Margin="10,247,10.4,0"
+               VerticalAlignment="Top" HorizontalContentAlignment="Center" 
+               Height="27" RenderTransformOrigin="0.761,0.492"/>
+        <Label Content="Set temperature [20-50] C" HorizontalAlignment="Left" Margin="1,276,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.513,-0.279" Width="149" Grid.Column="1" Height="26"/>
         <TextBox FontSize="18"  Text="{Binding SetPoint, UpdateSourceTrigger=PropertyChanged}" 
                  VerticalContentAlignment="Center" x:Name="Gainbox" Grid.Column="1" HorizontalAlignment="Left" TextAlignment="Center"
-                 Height="40" Margin="29.6,302,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" 
-                 RenderTransformOrigin="-4.850,0.126" Grid.ColumnSpan="2">
-        </TextBox>
+                 Height="40" Margin="30,307,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" 
+                 RenderTransformOrigin="-4.850,0.126"/>
 
-        <ni:ArrowButton Content="" Grid.Column="2" HorizontalAlignment="Left" Height="20" Margin="82.6,302,0,0" VerticalAlignment="Top" Width="33" Direction="Up" Click="ArrowButton_Click"/>
-        <ni:ArrowButton Content="" Grid.Column="2" HorizontalAlignment="Left" Height="17" Margin="82.6,327,0,0" VerticalAlignment="Top" Width="33" Direction="Down" RenderTransformOrigin="0.549,-0.11" Click="ArrowButton_Click_1"/>
-        <ni:MeterDouble Value="{Binding Temperature, UpdateSourceTrigger=PropertyChanged}" x:Name="TemperatureGauge" HorizontalAlignment="Left" Height="74" Margin="30,48,0,0" VerticalAlignment="Top" Width="146" Range="20, 50, System.Double" Grid.ColumnSpan="3"/>
-        <ni:MeterDouble Value="{Binding Gain, UpdateSourceTrigger=PropertyChanged}" x:Name="GainGauge" HorizontalAlignment="Left" Height="75" Margin="30,167,0,0" VerticalAlignment="Top" Width="146" Range="0, 5, System.Double" Grid.ColumnSpan="3"/>
+        <ni:ArrowButton Content="" Grid.Column="1" HorizontalAlignment="Left" Height="20" Margin="83,305,0,0" VerticalAlignment="Top" Width="33" Direction="Up" Click="ArrowButton_Click"/>
+        <ni:ArrowButton Content="" Grid.Column="1" HorizontalAlignment="Left" Height="17" Margin="83,330,0,0" VerticalAlignment="Top" Width="33" Direction="Down" RenderTransformOrigin="0.549,-0.11" Click="ArrowButton_Click_1"/>
+        <ni:MeterDouble Value="{Binding Temperature, UpdateSourceTrigger=PropertyChanged}" x:Name="TemperatureGauge" HorizontalAlignment="Left" Height="74" Margin="4,48,0,0" VerticalAlignment="Top" Width="146" Range="20, 50, System.Double" Grid.Column="1"/>
+        <ni:MeterDouble Value="{Binding Gain, UpdateSourceTrigger=PropertyChanged}" x:Name="GainGauge" HorizontalAlignment="Left" Height="75" Margin="4,167,0,0" VerticalAlignment="Top" Width="146" Range="0, 5, System.Double" Grid.Column="1"/>
 
         <!--<ni:Graph x:Name="TemperatureGraphUnfiltered" Grid.Column="2" HorizontalAlignment="Left" Height="251" Margin="144.4,329,0,0" VerticalAlignment="Top" Width="389">
             <ni:Graph.Axes>
