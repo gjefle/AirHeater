@@ -1,10 +1,21 @@
 ﻿$fa-font-path: "~font-awesome/fonts";
 /*@import '../node-modules/font-awesome/scss/font-awesome';*/
 @import "~font-awesome/scss/font-awesome";
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 /* You can add global styles to this file, and also import other style files */
 body {
   margin: 0;
   margin-bottom: 20px;
+}
+.toolbar {
+  background-color: #00BCD4;
+}
+button {
+  padding: 8px 10px 8px 10px;
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  border-radius: 3px;
+  border: 1px thin;
 }
 .layout {
   display: flex;
@@ -35,7 +46,9 @@ body {
   justify-content: center;
   align-items: center;
 }
-
+.center-height {
+  align-items: center;
+}
 
 .container {
   margin-top: 8px;

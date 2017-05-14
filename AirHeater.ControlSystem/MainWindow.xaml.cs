@@ -26,7 +26,7 @@ namespace AirHeater.ControlSystem
         private CancellationTokenSource pidToken;
         private IAirHeaterCom airHeaterCom;
         private PidController pidControl;
-        private PidReader realPid;
+        //private PidReader realPid;
         private OpcClient opcClient;
         private CancellationTokenSource token;
         private System.Threading.Tasks.Task pidTask;
@@ -35,8 +35,8 @@ namespace AirHeater.ControlSystem
 
         public MainWindow()
         {
-            //airHeaterCom = new SimulatedHeaterReader(new LowPassFilter(21.5), new AirHeaterSimulation(21.5, 0));
-           airHeaterCom = new AirHeaterReader(new LowPassFilter(21.5));
+            airHeaterCom = new SimulatedHeaterReader(new LowPassFilter(21.5), new AirHeaterSimulation(21.5, 0));
+            //airHeaterCom = new AirHeaterReader(new LowPassFilter(21.5));
             //airHeater = new DaqReader(new LowPassFilter(21.5));
             analogWaveform = new AnalogWaveform<double>(0);
             //unfilteredAnalogWaveform = new AnalogWaveform<double>(0);
@@ -45,8 +45,8 @@ namespace AirHeater.ControlSystem
             //TemperatureGraphUnfiltered.DataSource = unfilteredAnalogWaveform;
             DataContext = this;
             RunViewUpdater();
-            //pidControl = new PidController(airHeaterCom);
-            realPid = new PidReader();
+            pidControl = new PidController(airHeaterCom);
+            //realPid = new PidReader();
             opcClient = new OpcClient(airHeaterCom, pidControl);
             SetPoint = 23;
         }
@@ -67,10 +67,15 @@ namespace AirHeater.ControlSystem
 
         public void UpdatePid()
         {
-            //var gain = realPid.GetCurrentGain();
-            //airHeaterCom.SetGain(gain);
+            Gain = pidControl.GetCurrentGain();
+          
+
+            //Gain = realPid.GetCurrentGain();
+            //airHeaterCom.SetGain(Gain);
             //var t = airHeaterCom.GetFilteredTemperature();
             //realPid.SetProcessValue(t);
+            OnPropertyChanged("Gain");
+            OnPropertyChanged("GainLabel");
         }
 
         private double _gain;
@@ -85,6 +90,7 @@ namespace AirHeater.ControlSystem
             }
         }
 
+        public string GainLabel => Math.Round(_gain, 1) + " V";
         public void UpdateTemperatureData()
         {
             //if (IsConnected)
@@ -99,8 +105,8 @@ namespace AirHeater.ControlSystem
             //}
         }
 
-        private double _temperature;
-        private double _setPoint;
+        private static double _temperature;
+        private static double _setPoint;
 
         public double Temperature
         {
@@ -109,6 +115,7 @@ namespace AirHeater.ControlSystem
             {
                 _temperature = value;
                 OnPropertyChanged("Temperature");
+                OnPropertyChanged("TemperatureLabel");
             }
         }
 
@@ -120,7 +127,12 @@ namespace AirHeater.ControlSystem
                 _setPoint = value;
                 if (pidControl != null)
                     pidControl.SetPoint = value;
-                OnPropertyChanged("Temperature");
+                //if (realPid != null)
+                //{
+                //    realPid.SetSetPoint(_setPoint);
+                //}
+
+                OnPropertyChanged("SetPoint");
             }
         }
 
@@ -136,6 +148,21 @@ namespace AirHeater.ControlSystem
         {
             token.Cancel();
             pidToken.Cancel();
+        }
+
+        private void ArrowButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.SetPoint += 1;
+            OnPropertyChanged("SetPoint");
+        }
+
+        
+        public string TemperatureLabel => Math.Round(_temperature, 1) + " C";
+
+        private void ArrowButton_Click_1(object sender, RoutedEventArgs e)
+        {
+            this.SetPoint -= 1;
+            OnPropertyChanged("SetPoint");
         }
     }
 }

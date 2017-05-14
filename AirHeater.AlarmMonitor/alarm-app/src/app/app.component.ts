@@ -2,18 +2,20 @@
 import { DataContextService } from './data/data-context.service';
 import { AlarmView } from './models/AlarmView';
 import { IntervalObservable } from 'rxjs/observable/IntervalObservable';
-
+import { MdDialog, MdDialogRef } from '@angular/material';
+import { ConfigDialog } from './config/config-dialog.component';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   providers: [DataContextService]
 })
+
 export class AppComponent {
   title = 'Alarm Monitor';
   alarms: AlarmView[];
   interval: any;
-  constructor(private ctx: DataContextService) { }
+  constructor(private ctx: DataContextService, private dialog: MdDialog) { }
   ngOnInit() {
     this.getTodaysAlarms();
     this.interval = IntervalObservable.create(600).subscribe(this.getTodaysAlarms);
@@ -21,6 +23,14 @@ export class AppComponent {
   ngOnDestroy() {
     this.interval.unsubscribe(this.getAlarms);
   }
+  selectedOption;
+  openDialog() {
+    let dialogRef = this.dialog.open(ConfigDialog);
+    dialogRef.afterClosed().subscribe(result => {
+      this.selectedOption = result;
+    });
+  }
+  
   get sortedAlarms() {
     if (!this.alarms || this.alarms.length < 1) return [];
     return this.alarms;
