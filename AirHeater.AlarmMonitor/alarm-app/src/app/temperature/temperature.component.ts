@@ -77,12 +77,11 @@ export class TemperatureComponent implements OnInit {
   private updatePlotLines(): void {
     if (this.chart) {
       var plotLines = this.getPlotLines();
-      this.chart.yAxis[0].removePlotBand(plotLines[0].id);
-      this.chart.yAxis[0].removePlotBand(plotLines[1].id);
-      this.chart.yAxis[0].addPlotBand(plotLines[0]);
-      this.chart.yAxis[0].addPlotBand(plotLines[1]);  
+      plotLines.forEach(line => {
+        this.chart.yAxis[0].removePlotBand(line.id);
+        this.chart.yAxis[0].addPlotBand(line);
+      });
     }
-    
   }
   private getPlotLines(): any[] {
     return [

@@ -1,50 +1,13 @@
-﻿
-<div *ngIf="enabledAlarms.length > 0" class="layout-center alarm-banner">
+﻿<div *ngIf="enabledAlarms.length > 0" class="layout-center alarm-banner">
   <i class="fa fa-warning"></i>
   <div style="padding: 2px 5px 2px 5px">{{enabledAlarms[0].typeName}} - {{enabledAlarms[0].description}}</div>
   <div class="alarm-circle" *ngIf="enabledAlarms.length > 1">+{{enabledAlarms.length -1}}</div>
 </div>
-<div class="container">
-  <div class="layout space-between center-height">
-    <h1>
-      {{title}}
-    </h1>
-    <i class="fa fa-cog clickable" style="padding: 5px; font-size: 25px; margin-top: 20px" (click)="openDialog()"></i>
+<div class="layout space-between center-height">
+  <div class="md-margin">
+    <a class="routerlink" routerLinkActive="active" routerLink="/overview">Overview</a>
+    <a class="routerlink" routerLinkActive="active" routerLink="/alarm-details">Alarm details</a>  
   </div>
-  <hr />
-  <app-temperature [highAlarm]="temperatureConfig.highAlarmTemperature" 
-                   [lowAlarm]="temperatureConfig.lowAlarmTemperature"
-                   *ngIf="temperatureConfig"></app-temperature>
-  <hr />
-  <div class="layout table-container">
-    <table class="font-medium">
-      <tr>
-        <th style="width: 24px">Active</th>
-        <th>Date Activated</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Acknowledge</th>
-      </tr>
-      <tr *ngFor="let alarm of sortedAlarms" [ngStyle]="alarmStyle(alarm)">
-        <td style="max-width: 25px">
-          <i class="font-large fa fa-warning alarm-icon" *ngIf="alarm.active"></i>
-        </td>
-        <td>{{alarm.activationDate | date: 'dd/mm/yy h:m:s'}}</td>
-        <td>{{alarm.typeName}}</td>
-        <td>{{alarm.description}}</td>
-        <td>
-          <div style="float: right">
-            <div *ngIf="alarm.acknowledged">
-              Acknowledged {{alarm.acknowledgeDate | date: 'dd/mm/yy h:m:s'}}
-            </div>
-            <button (click)="acknowledgeAlarm(alarm)" *ngIf="!alarm.acknowledged">
-              <i class="fa fa-pencil-square-o"></i>
-              Acknowledge
-            </button>
-          </div>
-        </td>
-      </tr>
-    </table>
-  </div>
-
+  <i class="fa fa-cog clickable" style="padding: 5px; font-size: 25px" (click)="openDialog()"></i>
 </div>
+<router-outlet></router-outlet>

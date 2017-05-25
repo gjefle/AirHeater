@@ -31,12 +31,11 @@ namespace AirHeater.AlarmMonitor.Controllers
                 .ToList();
         }
 
-        [HttpGet, Route("TodaysAlarms")]
-        public IEnumerable<AlarmView> TodaysAlarms()
+        [HttpGet, Route("EnabledAlarms")]
+        public IEnumerable<AlarmView> EnabledAlarms()
         {
-            var today = DateTime.Today;
             return _ctx.AlarmView.FromSql("select * from dbo.AlarmView")
-                .Where(taw => taw.ActivationDate.DateTime > today)
+                .Where(taw => !taw.Acknowledged || taw.Active)
                 .OrderBy(av => !av.Active)
                 .ThenBy(av => av.Acknowledged)
                 .ToList();

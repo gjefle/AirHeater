@@ -8,12 +8,18 @@ import { Observable } from 'rxjs/observable';
 import { Temperature } from '../models/temperature';
 import { TemperatureConfig } from '../models/temperatureConfig';
 import { Headers, RequestOptions } from '@angular/http';
+
 @Injectable()
 export class DataContextService {
+  enabledAlarms: AlarmView[];
+  interval: any;
+  temperatureConfig: TemperatureConfig;
   constructor(private http: Http) {
-
+    this.setEnabledAlarms();
+    this.interval = IntervalObservable.create(600).subscribe(this.updateEnabledAlarms);
+    this.setTemperatureConfig();
   }
-  getTemperatureConfig() {
+  getTemperatureConfig(): Promise<TemperatureConfig> {
     const url = "/api/config/";
     return this.http.get(url)
       .toPromise()
@@ -21,6 +27,7 @@ export class DataContextService {
       .catch(this.handleError);
 
   }
+
   private headers = new Headers({ 'Content-Type': 'application/json' });
   updateTemperatureConfig(config: TemperatureConfig) {
     const url = `api/config/${config.temperatureConfigId}`;
@@ -30,7 +37,11 @@ export class DataContextService {
       .then(() => config)
       .catch(this.handleError);
   }
-
+  updateEnabledAlarms = () => {
+    this.getEnabledAlarms().then(alarms => {
+      this.enabledAlarms = alarms;
+    });
+  }
   getAlarms(): Promise<AlarmView[]> {
     const url = '/api/alarm/all';
     return this.http.get(url)
@@ -39,11 +50,10 @@ export class DataContextService {
       .then(res => res.json() as AlarmView[])
       .catch(this.handleError);
   }
-  todaysAlarms(): Promise<AlarmView[]> {
-    const url = '/api/alarm/todaysAlarms';
+  getEnabledAlarms = (): Promise<AlarmView[]> => {
+    const url = '/api/alarm/enabledAlarms';
     return this.http.get(url)
       .toPromise()
-      // Call map on the response observable to get the parsed people object
       .then(res => res.json() as AlarmView[])
       .catch(this.handleError);
   }
@@ -51,7 +61,6 @@ export class DataContextService {
     const url = '/api/alarm/AcknowledgeAlarm/' + alarm.alarmId;
     return this.http.get(url)
       .toPromise()
-      // Call map on the response observable to get the parsed people object
       .then(res => res.json() as AlarmView[])
       .catch(this.handleError);
   }
@@ -59,7 +68,6 @@ export class DataContextService {
     const url = '/api/temperature';
     return this.http.get(url)
       .toPromise()
-      // Call map on the response observable to get the parsed people object
       .then(res => res.json() as Temperature[])
       .catch(this.handleError);
   }
@@ -69,14 +77,23 @@ export class DataContextService {
 
     return this.http.get(url)
       .toPromise()
-      // Call map on the response observable to get the parsed people object
       .then(res => res.json() as Temperature[])
       .catch(this.handleError);
   }
 
   private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error); // for demo purposes only
+    console.error('An error occurred', error);
     return Promise.reject(error.message || error);
+  }
+  private setEnabledAlarms() {
+    this.getEnabledAlarms().then(alarms => {
+      this.enabledAlarms = alarms;
+    });
+  }
+  private setTemperatureConfig() {
+    this.getTemperatureConfig().then(config => {
+      this.temperatureConfig = <TemperatureConfig>config;
+    });
   }
 
 }

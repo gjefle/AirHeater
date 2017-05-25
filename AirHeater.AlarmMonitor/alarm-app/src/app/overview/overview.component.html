@@ -1,0 +1,13 @@
+﻿<div class="container">
+  <div class="layout space-between center-height">
+    <h2>
+      {{title}}
+    </h2>    
+  </div>
+  <hr />
+  <app-temperature [highAlarm]="temperatureConfig.highAlarmTemperature"
+                   [lowAlarm]="temperatureConfig.lowAlarmTemperature"
+                   *ngIf="temperatureConfig"></app-temperature>
+  <hr />
+  <alarm-table [alarms]="sortedAlarms"></alarm-table>
+</div>
