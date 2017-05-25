@@ -17,6 +17,7 @@ namespace AirHeater.AlarmMonitor.Data
         public DbSet<Tag> Tag { get; set; }
         public DbSet<AlarmType> AlarmType { get; set; }
         public DbSet<Alarm> Alarm { get; set; }
+        public DbSet<TemperatureConfig> TemperatureConfig { get; set; }
 
         public DbSet<AlarmView> AlarmView { get; set; }
 

@@ -6,11 +6,29 @@ import { AlarmView } from '../models/AlarmView';
 import { IntervalObservable } from 'rxjs/observable/IntervalObservable';
 import { Observable } from 'rxjs/observable';
 import { Temperature } from '../models/temperature';
+import { TemperatureConfig } from '../models/temperatureConfig';
 import { Headers, RequestOptions } from '@angular/http';
 @Injectable()
 export class DataContextService {
   constructor(private http: Http) {
 
+  }
+  getTemperatureConfig() {
+    const url = "/api/config/";
+    return this.http.get(url)
+      .toPromise()
+      .then(res => res.json() as TemperatureConfig)
+      .catch(this.handleError);
+
+  }
+  private headers = new Headers({ 'Content-Type': 'application/json' });
+  updateTemperatureConfig(config: TemperatureConfig) {
+    const url = `api/config/${config.temperatureConfigId}`;
+    return this.http
+      .put(url, JSON.stringify(config), { headers: this.headers })
+      .toPromise()
+      .then(() => config)
+      .catch(this.handleError);
   }
 
   getAlarms(): Promise<AlarmView[]> {
@@ -30,7 +48,7 @@ export class DataContextService {
       .catch(this.handleError);
   }
   acknowledgeAlarm(alarm: AlarmView) {
-    const url = '/api/alarm/AcknowledgeAlarm/'+alarm.alarmId;
+    const url = '/api/alarm/AcknowledgeAlarm/' + alarm.alarmId;
     return this.http.get(url)
       .toPromise()
       // Call map on the response observable to get the parsed people object

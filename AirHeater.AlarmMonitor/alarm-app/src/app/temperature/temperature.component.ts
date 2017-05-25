@@ -1,7 +1,8 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit, Input } from '@angular/core';
 import { IntervalObservable } from 'rxjs/observable/IntervalObservable';
 import { DataContextService } from '../../app/data/data-context.service';
 import { Temperature } from '../models/temperature';
+import { TemperatureConfig } from '../models/temperatureConfig';
 import * as moment from "moment";
 @Component({
   selector: 'app-temperature',
@@ -10,6 +11,7 @@ import * as moment from "moment";
   providers: [DataContextService]
 })
 export class TemperatureComponent implements OnInit {
+  @Input() config: TemperatureConfig;
   interval: any;
   temperatures: Temperature[];
   lastUpdate: Date;
@@ -85,7 +87,19 @@ export class TemperatureComponent implements OnInit {
         title: {
           text: "Temperature \u00B0C"
         },
-        min: 0
+        min: 0,
+        max: 50,
+        plotLines: [{
+          color: 'rgba(255, 84, 28, 0.4)',
+          width: 1,
+          value: this.config.lowAlarmTemperature-7
+        },
+        {
+          color: 'rgba(255, 84, 28, 0.4)',
+            width: 1,
+            value: this.config.highAlarmTemperature
+          }
+        ]
       },
       title: { text: "" },
       series: [{

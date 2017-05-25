@@ -16,17 +16,6 @@ namespace AirHeater.ControlSystem.Simulation
     {
         private CancellationTokenSource token;
         private System.Threading.Tasks.Task task;
-        private readonly Stopwatch stopwatch;
-
-        public AirHeaterSimulation(double roomTemperature, double u)
-        {
-            _u = u;
-            Tenv = roomTemperature;
-            token = new CancellationTokenSource();
-            Tout = roomTemperature;
-            stopwatch = new Stopwatch();
-            StartAirHeater();
-        }
 
         private const double Td = 2; //Time delay (s).
         private const double Tc = 22; // Time constant (s).
@@ -35,49 +24,40 @@ namespace AirHeater.ControlSystem.Simulation
         public double Tout; // Temperature at tube outlet.
         public double steps = Td / 0.1; // (Td/0.1)
         public int stepCount = 0;
-        private double u_start;
-
-        private double u_actual;
-
-        //public double T;
-        private double _u;
-
-        public double u
+        public Queue<double> u_delay;
+        public AirHeaterSimulation(double roomTemperature, double u)
         {
-            get => Math.Round(_u, 2);
-            set
+            int delaySteps = Convert.ToInt32(Math.Round(steps));
+            u_delay = new Queue<double>(delaySteps);
+            for (int i = 0; i < delaySteps; i++)
             {
-                _u = value;
-                u_start = u_actual;
-                stepCount = 0;
-                stopwatch.Reset();
-                stopwatch.Start();
+                u_delay.Enqueue(u);
             }
+            Tenv = roomTemperature;
+            token = new CancellationTokenSource();
+            Tout = roomTemperature;
+            StartAirHeater();
         }
 
+        //public double u
+        //{
+        //    get
+        //    {
+        //        var gain = (u_delay.Dequeue());
+        //        return Math.Round(double.IsNaN(gain) ? 0 : gain, 2);
+        //    }
+        //    set
+        //    {
+        //        u_delay.Enqueue(value);
+        //    }
+        //}
 
-        public void T_update(double u, double t)
+        public double u { get; set; }
+
+        public void T_update(double gain)
         {
-            var tchange = (-Tout + (Kh * u_actual + Tenv)) / Tc;
+            var tchange = (-Tout + (Kh * gain + Tenv)) / Tc;
             Tout = tchange * 0.1 + Tout;
-        }
-
-        /// <summary>
-        /// Simulate a transport delay on gain
-        /// </summary>
-        /// <param name="u"></param>
-        /// <param name="t"></param>
-        public void UpdateGain(double u, double t)
-        {
-            if (stepCount < steps)
-            {
-                u_actual += (u - u_start) / steps;
-                stepCount++;
-            }
-            else
-            {
-                u_actual = u;
-            }
         }
 
         private void StartAirHeater()
@@ -86,13 +66,12 @@ namespace AirHeater.ControlSystem.Simulation
 
             task = System.Threading.Tasks.Task.Run(async () =>
             {
-                stopwatch.Start();
                 while (!token.IsCancellationRequested)
                 {
                     var waitTask = Task.Delay(100, token.Token);
-                    var t = stopwatch.ElapsedMilliseconds / 1000.0;
-                    UpdateGain(u, t);
-                    T_update(u, t);
+                    u_delay.Enqueue(u);
+                    var gain = u_delay.Dequeue();
+                    T_update(gain);
                     await waitTask;
                 }
             });

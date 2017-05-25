@@ -9,10 +9,10 @@
     <h1>
       {{title}}
     </h1>
-    <i class="fa fa-cog" style="padding: 5px; font-size: 25px; margin-top: 20px" (click)="openDialog()"></i>
+    <i class="fa fa-cog clickable" style="padding: 5px; font-size: 25px; margin-top: 20px" (click)="openDialog()"></i>
   </div>
   <hr />
-  <app-temperature></app-temperature>
+  <app-temperature [config]="temperatureConfig" *ngIf="temperatureConfig"></app-temperature>
   <hr />
   <div class="layout table-container">
     <table class="font-medium">

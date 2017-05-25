@@ -1,25 +1,25 @@
-﻿import { Component } from '@angular/core';
-
+﻿import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { TemperatureConfig } from '../models/temperatureConfig';
 import { MdDialog, MdDialogRef } from '@angular/material';
+import 'rxjs/add/operator/debounceTime';
 
 @Component({
   selector: 'config-dialog',
-  template: `      
-<form class="example-form">
-  <md-input-container class="example-full-width">
-    <input mdInput placeholder="Low Level">
-  </md-input-container>&nbsp;-&nbsp;
-  <md-input-container class="example-full-width">
-    <input mdInput placeholder="High Level">
-  </md-input-container>   
-
-        </form>   
-<div class="layout" style="justify-content: flex-end">
-<button type="button" (click)="dialogRef.close()">Close</button>
-</div>
-        
-    `,
+  templateUrl: './config-dialog.component.html'
 })
 export class ConfigDialog {
-  constructor(public dialogRef: MdDialogRef<ConfigDialog>) { }
+  @Input() temperatureConfig: TemperatureConfig;
+  @Output() onChange = new EventEmitter<TemperatureConfig>();
+  @ViewChild('highAlarmForm') highlarmForm: any;
+  @ViewChild('lowAlarmForm') lowAlarmForm: any;
+  constructor(public dialogRef: MdDialogRef<ConfigDialog>) {
+
+  }
+  ngOnInit() {
+
+  }
+
+  configChange() {
+    this.onChange.emit(this.temperatureConfig);
+  }
 }

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:AirHeater.ControlSystem"
         xmlns:ni="http://schemas.ni.com/controls/2009/xaml/presentation" x:Class="AirHeater.ControlSystem.MainWindow"
         mc:Ignorable="d"
-        Title="Air Heater Control System" Height="424.323" Width="822.487">
+        Title="Air Heater Control System" Height="445.123" Width="828.642">
     <Grid Margin="0,0,11.4,5.6">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10*"/>
@@ -41,6 +41,13 @@
         <ni:ArrowButton Content="" Grid.Column="1" HorizontalAlignment="Left" Height="17" Margin="83,330,0,0" VerticalAlignment="Top" Width="33" Direction="Down" RenderTransformOrigin="0.549,-0.11" Click="ArrowButton_Click_1"/>
         <ni:MeterDouble Value="{Binding Temperature, UpdateSourceTrigger=PropertyChanged}" x:Name="TemperatureGauge" HorizontalAlignment="Left" Height="74" Margin="4,48,0,0" VerticalAlignment="Top" Width="146" Range="20, 50, System.Double" Grid.Column="1"/>
         <ni:MeterDouble Value="{Binding Gain, UpdateSourceTrigger=PropertyChanged}" x:Name="GainGauge" HorizontalAlignment="Left" Height="75" Margin="4,167,0,0" VerticalAlignment="Top" Width="146" Range="0, 5, System.Double" Grid.Column="1"/>
+        <!--<ListView Name="ListView1" Grid.Column="2" HorizontalAlignment="Left" Height="496" Margin="638.6,10,0,0" VerticalAlignment="Top" Width="127">
+            <ListView.View >
+                <GridView ColumnHeaderToolTip="H">
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>-->
 
         <!--<ni:Graph x:Name="TemperatureGraphUnfiltered" Grid.Column="2" HorizontalAlignment="Left" Height="251" Margin="144.4,329,0,0" VerticalAlignment="Top" Width="389">
             <ni:Graph.Axes>

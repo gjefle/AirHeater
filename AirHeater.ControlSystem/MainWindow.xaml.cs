@@ -25,17 +25,24 @@ namespace AirHeater.ControlSystem
     {
         private CancellationTokenSource pidToken;
         private IAirHeaterCom airHeaterCom;
+
         private PidController pidControl;
+
         //private PidReader realPid;
         private OpcClient opcClient;
+
         private CancellationTokenSource token;
         private System.Threading.Tasks.Task pidTask;
+
         private AnalogWaveform<double> analogWaveform;
+
         //private AnalogWaveform<double> unfilteredAnalogWaveform;
+        private AirHeaterSimulation sim;
 
         public MainWindow()
         {
-            airHeaterCom = new SimulatedHeaterReader(new LowPassFilter(21.5), new AirHeaterSimulation(21.5, 0));
+            sim = new AirHeaterSimulation(21.5, 0);
+            airHeaterCom = new SimulatedHeaterReader(new LowPassFilter(21.5), sim);
             //airHeaterCom = new AirHeaterReader(new LowPassFilter(21.5));
             //airHeater = new DaqReader(new LowPassFilter(21.5));
             analogWaveform = new AnalogWaveform<double>(0);
@@ -50,35 +57,6 @@ namespace AirHeater.ControlSystem
             opcClient = new OpcClient(airHeaterCom, pidControl);
             SetPoint = 23;
         }
-        private void RunViewUpdater()
-        {
-            token = new CancellationTokenSource();
-            var task = System.Threading.Tasks.Task.Run(async () =>
-            {
-                while (!token.IsCancellationRequested)
-                {
-                    UpdateTemperatureData();
-                    UpdatePid();
-                    //UpdateSimulator();
-                    await Task.Delay(500, token.Token);
-                }
-            });
-        }
-
-        public void UpdatePid()
-        {
-            Gain = pidControl.GetCurrentGain();
-          
-
-            //Gain = realPid.GetCurrentGain();
-            //airHeaterCom.SetGain(Gain);
-            //var t = airHeaterCom.GetFilteredTemperature();
-            //realPid.SetProcessValue(t);
-            OnPropertyChanged("Gain");
-            OnPropertyChanged("GainLabel");
-        }
-
-        private double _gain;
 
         public double Gain
         {
@@ -94,17 +72,68 @@ namespace AirHeater.ControlSystem
 
         public string TemperatureLabel => "Temperature " + Math.Round(_temperature, 1) + " C";
 
+        private void RunViewUpdater()
+        {
+            token = new CancellationTokenSource();
+            var task = System.Threading.Tasks.Task.Run(async () =>
+            {
+                while (!token.IsCancellationRequested)
+                {
+                    UpdateTemperatureData();
+                    UpdatePid();
+                    //UpdateSimulator();
+                    //SetList();
+                    await Task.Delay(500, token.Token);
+                }
+            });
+        }
+
+        //public void SetList()
+        //{
+        //    var list = sim.u_delay.ToList();
+        //    this.Dispatcher.Invoke(() =>
+        //    {
+        //        ListView1.Items.Clear();
+        //        foreach (var value in list)
+        //        {
+        //            ListView1.Items.Add(value.ToString());
+
+        //        }
+        //    });
+        //}
+
+        public void UpdatePid()
+        {
+            Gain = pidControl.GetCurrentGain();
+            //Gain = realPid.GetCurrentGain();
+            //airHeaterCom.SetGain(Gain);
+            //var t = airHeaterCom.GetFilteredTemperature();
+            //realPid.SetProcessValue(t);
+            OnPropertyChanged("Gain");
+            OnPropertyChanged("GainLabel");
+        }
+
+        private double _gain;
+
+
         public void UpdateTemperatureData()
         {
             //if (IsConnected)
             //{
             try
             {
+
                 Temperature = airHeaterCom?.GetFilteredTemperature() ?? 0;
-                analogWaveform.Append(AnalogWaveform<double>.FromArray1D(new double[] { Temperature }));
+                Dispatcher.Invoke(() =>
+                {
+                    analogWaveform.Append(AnalogWaveform<double>.FromArray1D(new double[] {Temperature}));
+                });
                 //unfilteredAnalogWaveform.Append(AnalogWaveform<double>.FromArray1D(new double[] { airHeater?.ReadTemperature() ?? 0 }));
             }
-            catch (Exception e) { throw e; }
+            catch (Exception e)
+            {
+                throw e;
+            }
             //}
         }
 
@@ -158,7 +187,7 @@ namespace AirHeater.ControlSystem
             this.SetPoint += 1;
             OnPropertyChanged("SetPoint");
         }
-        
+
         private void ArrowButton_Click_1(object sender, RoutedEventArgs e)
         {
             this.SetPoint -= 1;

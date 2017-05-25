@@ -1,9 +1,27 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <title>config-dialog.component</title>
-</head>
-<body>
+﻿<div>
+  <form>
+    <div class="layout center-height space-between" style="max-width: 200px">
+      <label>Low level alarm</label>
+      <input style="width: 40px; margin: 8px" placeholder="Low Level"
+             type="number"
+             name="low"
+             (focusout)="configChange()"
+             [(ngModel)]="temperatureConfig.lowAlarmTemperature">
+    </div>
     
-</body>
-</html>
+  </form>
+  <form>
+    <div class="layout center-height space-between" style="max-width: 200px">
+      <label>High level alarm</label>
+      <input style="width: 40px; margin: 8px" placeholder="High Level"
+             type="number"
+             name="high" min="temperatureConfig.lowAlarmTemperature"
+             (focusout)="configChange()"
+             [(ngModel)]="temperatureConfig.highAlarmTemperature">
+    </div>
+  </form>
+</div>
+<br />
+<div class="layout md-margin" style="justify-content: flex-end">
+  <button type="button" (click)="dialogRef.close()">Close</button>
+</div>
