@@ -5,7 +5,7 @@
       <input style="width: 40px; margin: 8px" placeholder="Low Level"
              type="number"
              name="low"
-             [(ngModel)]="temperatureConfig.lowAlarmTemperature">
+             [(ngModel)]="lowAlarmVal">
     </div>
     
   </form>
@@ -15,7 +15,7 @@
       <input style="width: 40px; margin: 8px" placeholder="High Level"
              type="number"
              name="high" min="temperatureConfig.lowAlarmTemperature"
-             [(ngModel)]="temperatureConfig.highAlarmTemperature">
+             [(ngModel)]="highAlarmVal">
     </div>
   </form>
 </div>

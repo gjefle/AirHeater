@@ -11,7 +11,9 @@ import * as moment from "moment";
   providers: [DataContextService]
 })
 export class TemperatureComponent implements OnInit {
-  @Input() config: TemperatureConfig;
+  @Input() highAlarm: number;
+  @Input() lowAlarm: number;
+
   interval: any;
   temperatures: Temperature[];
   lastUpdate: Date;
@@ -28,7 +30,7 @@ export class TemperatureComponent implements OnInit {
     this.getAllTemperatures();
   }
   ngOnChanges() {
-    this.getAllTemperatures();
+    this.updatePlotLines();
   }
   ngOnDestroy() {
     this.interval.unsubscribe(this.updateTemperatures);
@@ -72,6 +74,34 @@ export class TemperatureComponent implements OnInit {
     });
     this.chart.series[0].setData(data, true);
   }
+  private updatePlotLines(): void {
+    if (this.chart) {
+      var plotLines = this.getPlotLines();
+      this.chart.yAxis[0].removePlotBand(plotLines[0].id);
+      this.chart.yAxis[0].removePlotBand(plotLines[1].id);
+      this.chart.yAxis[0].addPlotBand(plotLines[0]);
+      this.chart.yAxis[0].addPlotBand(plotLines[1]);  
+    }
+    
+  }
+  private getPlotLines(): any[] {
+    return [
+      {
+        id: 'lowerLevel',
+        color: 'rgba(0, 163, 212, 0.7)',
+        width: 1,
+        value: this.lowAlarm,
+        dashStyle: 'Dash'
+      },
+      {
+        id: 'higherLevel',
+        color: 'rgba(0, 163, 212, 0.7)',
+        width: 1,
+        value: this.highAlarm,
+        dashStyle: 'Dash'
+      }
+    ];
+  }
   private setOptions() {
     this.options = {
       tooltip: {
@@ -89,18 +119,8 @@ export class TemperatureComponent implements OnInit {
         },
         min: 0,
         max: 50,
-        plotLines: [{
-          color: 'rgba(255, 84, 28, 0.4)',
-          width: 1,
-          value: this.config.lowAlarmTemperature-7
-        },
-        {
-          color: 'rgba(255, 84, 28, 0.4)',
-            width: 1,
-            value: this.config.highAlarmTemperature
-          }
-        ]
-      },
+        plotLines: this.getPlotLines()
+  },
       title: { text: "" },
       series: [{
         name: "Logged temperature",

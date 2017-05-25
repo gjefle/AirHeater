@@ -13,19 +13,31 @@ export class ConfigDialog {
   @Output() onChange = new EventEmitter<TemperatureConfig>();
   @ViewChild('highAlarmForm') highlarmForm: any;
   @ViewChild('lowAlarmForm') lowAlarmForm: any;
-  constructor(public dialogRef: MdDialogRef<ConfigDialog>) {
 
-  }
+  highAlarmVal: number;
+  lowAlarmVal: number;
+  constructor(public dialogRef: MdDialogRef<ConfigDialog>) { }
   ngOnInit() {
+    this.highAlarmVal = this.temperatureConfig.highAlarmTemperature;
+    this.lowAlarmVal = this.temperatureConfig.lowAlarmTemperature;
     // Set a delay of 500ms before changes to config values are saved.
     this.highlarmForm.valueChanges
       .debounceTime(500)
       .distinctUntilChanged()
-      .subscribe(data => this.configChange());
+      .subscribe(() => {
+        if (this.highAlarmVal !== this.temperatureConfig.highAlarmTemperature)
+          this.temperatureConfig.highAlarmTemperature = this.highAlarmVal;
+          this.configChange();
+      });
     this.lowAlarmForm.valueChanges
       .debounceTime(500)
       .distinctUntilChanged()
-      .subscribe(data => this.configChange());
+      .subscribe(() => {
+        if (this.lowAlarmVal !== this.temperatureConfig.lowAlarmTemperature) {
+          this.temperatureConfig.lowAlarmTemperature = this.lowAlarmVal;
+          this.configChange();
+        }
+      });
   }
 
   configChange() {

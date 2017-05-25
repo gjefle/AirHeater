@@ -38,6 +38,7 @@ export class AppComponent {
   }
 
   onConfigChange = (config: TemperatureConfig) => {
+    
     this.ctx.updateTemperatureConfig(config);
   }
 
