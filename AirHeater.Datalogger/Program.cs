@@ -37,6 +37,7 @@ namespace AirHeater.Datalogger
                 {
                     var waitTask = Task.Delay(1000, token.Token);
                     LogTemperatureData();
+                    LogGainData();
                     await waitTask;
                 }
             });
@@ -66,6 +67,30 @@ namespace AirHeater.Datalogger
                 throw;
             }
         }
+        public static void LogGainData()
+        {
+            var gain = GetGain();
+            if (gain == null) return;
+            try
+            {
+                //var connectionString = ConfigurationManager.ConnectionStrings["PlantContext"].ConnectionString;
+                using (SqlConnection dbCon = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand("AddGain", dbCon);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("@Value", Math.Round((double)gain, 2)));
+                    cmd.Parameters.Add(new SqlParameter("@TagName", "Gain"));
+                    dbCon.Open();
+                    cmd.ExecuteNonQuery();
+                    dbCon.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
         void StopLogger()
         {
             token.Cancel();
@@ -76,6 +101,11 @@ namespace AirHeater.Datalogger
             catch (AggregateException)
             {
             }
+        }
+
+        private static double? GetGain()
+        {
+            return opcReader?.ReadFloatingTag("Gain") ?? null;
         }
         private static double? GetTemperature()
         {
