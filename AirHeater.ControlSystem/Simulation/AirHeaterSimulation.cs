@@ -69,8 +69,8 @@ namespace AirHeater.ControlSystem.Simulation
                 while (!token.IsCancellationRequested)
                 {
                     var waitTask = Task.Delay(100, token.Token);
-                    u_delay.Enqueue(u);
                     var gain = u_delay.Dequeue();
+                    u_delay.Enqueue(u);
                     T_update(gain);
                     await waitTask;
                 }

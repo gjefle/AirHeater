@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AirHeater.ControlSystem.Filtering;
+using AirHeater.ControlSystem.Filter;
 using AirHeater.ControlSystem.Simulation;
 
 namespace AirHeater.ControlSystem.PlantCom

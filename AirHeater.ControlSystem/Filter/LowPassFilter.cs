@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AirHeater.ControlSystem.Filtering
+namespace AirHeater.ControlSystem.Filter
 {
     public interface IFilter
     {

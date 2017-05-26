@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows;
-using AirHeater.ControlSystem.Filtering;
+using AirHeater.ControlSystem.Filter;
 using AirHeater.ControlSystem.OpcCom;
 using AirHeater.ControlSystem.PID;
 using AirHeater.ControlSystem.PlantCom;

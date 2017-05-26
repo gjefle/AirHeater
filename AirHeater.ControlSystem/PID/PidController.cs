@@ -23,8 +23,9 @@ namespace AirHeater.ControlSystem.PID
         private double Tout;
         private double Kp = 0.515; // T/K(Tc+Td);
         private double Ti = 18.3; // min(T, c(Tc +Td)
-        private int Ts = 100; // ms
-        private double z;
+        private const double Ts = 0.1; // seconds
+        private const int WaitTime = 100; // Ts in milliseconds
+        private double ek;
         private IAirHeaterCom _plantReader;
         private CancellationTokenSource pidToken;
         private System.Threading.Tasks.Task pidTask;
@@ -41,9 +42,9 @@ namespace AirHeater.ControlSystem.PID
         }
         private double CalculateGain()
         {
-            var e = SetPoint - Tout;
-            var u = Kp * e + (Kp / Ti) * z;
-            z = z + Ts/1000.0 * e;
+            var e_change = SetPoint - Tout;
+            var u = Kp * e_change + (Kp / Ti) * ek;
+            ek = ek + Ts * e_change;
             return Math.Max(Math.Min(u, MaxGain), MinGain); // Make sure gain is within 0-5V range
         }
 
@@ -62,7 +63,7 @@ namespace AirHeater.ControlSystem.PID
             {
                 while (!pidToken.IsCancellationRequested)
                 {
-                    var delayTask = Task.Delay(Ts, pidToken.Token);
+                    var delayTask = Task.Delay(WaitTime, pidToken.Token);
                     UpdatePlant(SetPoint);
                     await delayTask;
                 }
