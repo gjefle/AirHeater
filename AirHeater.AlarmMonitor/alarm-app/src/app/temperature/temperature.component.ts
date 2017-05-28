@@ -26,7 +26,7 @@ export class TemperatureComponent implements OnInit {
     this.lastUpdate = new Date();
     this.lastUpdate.setFullYear(1970);
     this.setOptions();
-    this.interval = IntervalObservable.create(2000).subscribe(this.updateTemperatures);
+    //this.interval = IntervalObservable.create(2000).subscribe(this.updateTemperatures);
     this.getAllTemperatures();
   }
   ngOnChanges() {

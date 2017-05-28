@@ -22,8 +22,6 @@ namespace AirHeater.Datalogger
         {
             connectionString = ConfigurationManager.ConnectionStrings["PlantContext"].ConnectionString;
             opcReader = new OpcReader(new DataSocket());
-            //var temperature = GetTemperature();
-            //Console.WriteLine(temperature);
             StartLogger();
             Console.ReadLine();
         }
@@ -73,7 +71,6 @@ namespace AirHeater.Datalogger
             if (gain == null) return;
             try
             {
-                //var connectionString = ConfigurationManager.ConnectionStrings["PlantContext"].ConnectionString;
                 using (SqlConnection dbCon = new SqlConnection(connectionString))
                 {
                     SqlCommand cmd = new SqlCommand("AddGain", dbCon);

@@ -55,7 +55,7 @@ namespace AirHeater.ControlSystem
             pidControl = new PidController(airHeaterCom);
             //realPid = new PidReader();
             opcClient = new OpcClient(airHeaterCom, pidControl);
-            SetPoint = 23;
+            SetPoint = 25;
         }
 
         public double Gain

@@ -8,6 +8,19 @@
     <a class="routerlink" routerLinkActive="active" routerLink="/overview">Overview</a>
     <a class="routerlink" routerLinkActive="active" routerLink="/alarm-details">Alarm details</a>  
   </div>
-  <i class="fa fa-cog clickable" style="padding: 5px; font-size: 25px" (click)="openDialog()"></i>
+  <div class="layout center-height">
+    <div style="position: relative" class="clickable" (click)="openShelveDialog()">
+      <i class="fa fa-eye-slash"
+         style="padding: 5px; font-size: 25px; margin: 3px">
+      </i>
+      <div class="shelve-notify-container" *ngIf="shelvedAlarmTypes.length">
+        <span class="shelve-notify">
+          {{shelvedAlarmTypes.length}}
+        </span>
+      </div>
+    </div>
+    
+    <i class="fa fa-cog clickable" style="padding: 5px; font-size: 25px; margin: 3px; margin-left: 10px" (click)="openConfigDialog()"></i>
+  </div>
 </div>
 <router-outlet></router-outlet>

@@ -11,6 +11,14 @@ body {
 .toolbar {
   background-color: #00BCD4;
 }
+.hide-on-mobile {
+  
+}
+@media (max-width: 599px) {
+  .hide-on-mobile {
+    display: none;
+  }
+}
 button {
   padding: 8px 10px 8px 10px;
   font-size: 16px;  

@@ -3,8 +3,9 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 import { AlarmView } from '../models/AlarmView';
+import { AlarmType } from '../models/AlarmType';
 import { IntervalObservable } from 'rxjs/observable/IntervalObservable';
-import { Observable } from 'rxjs/observable';
+
 import { Temperature } from '../models/temperature';
 import { TemperatureConfig } from '../models/temperatureConfig';
 import { Headers, RequestOptions } from '@angular/http';
@@ -12,11 +13,14 @@ import { Headers, RequestOptions } from '@angular/http';
 @Injectable()
 export class DataContextService {
   enabledAlarms: AlarmView[];
+  alarmTypes: AlarmType[] = [];
   interval: any;
   temperatureConfig: TemperatureConfig;
+  private headers = new Headers({ 'Content-Type': 'application/json' });
   constructor(private http: Http) {
+    this.getAlarmTypes();
     this.setEnabledAlarms();
-    this.interval = IntervalObservable.create(600).subscribe(this.updateEnabledAlarms);
+    //this.interval = IntervalObservable.create(600).subscribe(this.updateEnabledAlarms);
     this.setTemperatureConfig();
   }
   getTemperatureConfig(): Promise<TemperatureConfig> {
@@ -25,10 +29,24 @@ export class DataContextService {
       .toPromise()
       .then(res => res.json() as TemperatureConfig)
       .catch(this.handleError);
-
   }
-
-  private headers = new Headers({ 'Content-Type': 'application/json' });
+  getAlarmTypes() {
+    const url = "/api/alarmType/all";
+    return this.http.get(url)
+      .toPromise()
+      .then(res => {
+        this.alarmTypes = res.json() as AlarmType[];
+      })
+      .catch(this.handleError);
+  }
+  saveAlarmType(alarmType: AlarmType) {
+    const url = `api/alarmType/${alarmType.alarmTypeId}`;
+    return this.http
+      .put(url, JSON.stringify(alarmType), { headers: this.headers })
+      .toPromise()
+      .then(() => alarmType)
+      .catch(this.handleError);
+  }
   updateTemperatureConfig(config: TemperatureConfig) {
     const url = `api/config/${config.temperatureConfigId}`;
     return this.http
@@ -37,6 +55,8 @@ export class DataContextService {
       .then(() => config)
       .catch(this.handleError);
   }
+  
+
   updateEnabledAlarms = () => {
     this.getEnabledAlarms().then(alarms => {
       this.enabledAlarms = alarms;

@@ -1,0 +1,23 @@
+﻿<div>
+  <table class="font-medium">
+    <tr>
+      <th>Alarm type</th>
+      <th>Shelve</th>
+
+    </tr>
+    <tr *ngFor="let alarmType of alarmTypes">
+      <td>{{alarmType.typeName}}</td>
+      <td>
+        <button (click)="shelveAlarmType(alarmType)" *ngIf="!alarmType.shelved" style="width: 112px">
+          <i class="fa fa-eye-slash"></i>
+          Shelve
+        </button>
+        <button (click)="unshelveAlarmType(alarmType)" *ngIf="alarmType.shelved" style="width: 112px">
+          <i class="fa fa-eye"></i>
+          Unshelve
+        </button>
+      </td>
+
+    </tr>
+  </table>
+</div>

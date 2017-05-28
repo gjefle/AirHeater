@@ -4,7 +4,7 @@
       <th style="width: 24px">Active</th>
       <th>Date Activated</th>
       <th>Type</th>
-      <th>Description</th>
+      <th class="hide-on-mobile">Description</th>
       <th>Acknowledge</th>
     </tr>
     <tr *ngFor="let alarm of alarms" [ngStyle]="alarmStyle(alarm)">
@@ -13,7 +13,7 @@
       </td>
       <td>{{alarm.activationDate | date: 'dd/MM/yy h:m:s'}}</td>
       <td>{{alarm.typeName}}</td>
-      <td>{{alarm.description}}</td>
+      <td class="hide-on-mobile">{{alarm.description}}</td>
       <td>        
           <div *ngIf="alarm.acknowledged">
             Acknowledged {{alarm.acknowledgeDate | date: 'dd/MM/yy h:m:s'}}

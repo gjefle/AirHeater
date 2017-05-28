@@ -1,5 +1,6 @@
 ﻿import { Component, OnInit, Input } from '@angular/core';
 import { AlarmView } from '../models/AlarmView';
+import { AlarmType } from '../models/AlarmType';
 import { DataContextService } from '../data/data-context.service';
 
 @Component({
@@ -22,5 +23,9 @@ export class AlarmTableComponent implements OnInit {
   }
   acknowledgeAlarm(alarm: AlarmView) {
     this.ctx.acknowledgeAlarm(alarm);
+  }
+  shelveAlarm(alarmType: AlarmType) {
+    alarmType.shelved = true;
+    this.ctx.saveAlarmType(alarmType);
   }
 }

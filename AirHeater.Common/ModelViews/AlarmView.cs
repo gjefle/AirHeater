@@ -15,6 +15,7 @@ namespace AirHeater.Common.ModelViews
         public DateTimeOffset? AcknowledgeDate { get; set; }
         public string Description { get; set; }
         public bool Active { get; set; }
+        public bool Shelved { get; set; }
         public string  TypeName { get; set; }
     }
 }

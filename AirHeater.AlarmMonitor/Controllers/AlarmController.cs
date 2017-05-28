@@ -21,11 +21,12 @@ namespace AirHeater.AlarmMonitor.Controllers
             _ctx = ctx;
         }
 
-        // GET api/values
+        // GET api/alarm
         [HttpGet, Route("All")]
         public IEnumerable<AlarmView> All()
         {
             return  _ctx.AlarmView.FromSql("select * from dbo.AlarmView")
+                .Where(av => !av.Shelved)
                 .OrderBy(av => !av.Active)
                 .ThenBy(av => av.Acknowledged)
                 .ToList();
@@ -35,7 +36,7 @@ namespace AirHeater.AlarmMonitor.Controllers
         public IEnumerable<AlarmView> EnabledAlarms()
         {
             return _ctx.AlarmView.FromSql("select * from dbo.AlarmView")
-                .Where(taw => !taw.Acknowledged || taw.Active)
+                .Where(av => !av.Shelved && (!av.Acknowledged || av.Active))
                 .OrderBy(av => !av.Active)
                 .ThenBy(av => av.Acknowledged)
                 .ToList();

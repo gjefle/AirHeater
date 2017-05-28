@@ -7,5 +7,6 @@ export class AlarmView {
   acknowledgeDate: Date;
   description: string;
   active: boolean;
+  shelved: boolean;
   typeName: string;
 }

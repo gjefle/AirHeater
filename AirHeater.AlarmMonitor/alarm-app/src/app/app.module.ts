@@ -15,6 +15,7 @@ import { OverviewComponent } from './overview/overview.component';
 import { AlarmDetailsComponent } from './alarm-details/alarm-details.component';
 import { DataContextService } from './data/data-context.service';
 import { AlarmTableComponent } from './alarm-table/alarm-table.component';
+import { ShelveDialog } from './shelve-dialog/shelve-dialog.component';
 declare var require: any;
 export function highchartsFactory() {
   return require('highcharts');
@@ -27,9 +28,10 @@ export function highchartsFactory() {
     ConfigDialog,
     OverviewComponent,
     AlarmDetailsComponent,
-    AlarmTableComponent
+    AlarmTableComponent,
+    ShelveDialog
   ],
-  entryComponents: [ConfigDialog],
+  entryComponents: [ConfigDialog, ShelveDialog],
   imports: [
     BrowserModule,
     RouterModule.forRoot([
